@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("Economical Strategy");
 
     createStart();
-    close();
+
 }
 
 void MainWindow::createStart() {
@@ -20,6 +20,7 @@ void MainWindow::createStart() {
     start_widget = new QWidget;
     start_grid = new QGridLayout;
     start_label = new QLabel;
+    connect(start_button, SIGNAL( clicked() ), this, SLOT( start() ));
 
     start_button->setText("Играть");
     start_label->setText("Введите количество игроков");
@@ -32,10 +33,18 @@ void MainWindow::createStart() {
     start_widget->setFixedSize(300, 150);
     start_widget->show();
 
-
 }
 
+void MainWindow::clearStart() {
+    delete start_button;
+    delete start_spinBoxButton;
+    delete start_grid;
+    delete start_label;
+    delete start_widget;
+}
+void MainWindow::startClicked() {
 
+}
 MainWindow::~MainWindow()
 {
     delete ui;

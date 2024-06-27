@@ -23,7 +23,9 @@ public:
     ~MainWindow();
 
     void createStart();
-
+    void clearStart();
+private slots:
+    void startClicked();
 private:
     Ui::MainWindow *ui;
 
@@ -31,7 +33,6 @@ private:
     QWidget* start_widget;
     QSpinBox* start_spinBoxButton;
     QGridLayout* start_grid;
-
     QLabel* start_label;
 
 
