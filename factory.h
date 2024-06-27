@@ -8,53 +8,42 @@ protected:
     int amount;
     int max_per_round;
 public:
-    virtual ~Factory() = 0;
+    virtual Factory(const int& _cost, const int& _amount, const int& _max_per_round) : cost(_cost), amount(_amount), max_per_round(_max_per_round) {};
+
+    int produce() {
+        if (amount > max_per_round) {
+            amount -= max_per_round;
+            return max_per_round;
+        }
+        else {
+            int temp = amount;
+            amount = 0;
+            return temp;
+        }
+    }
+
+    void addRaw(const int& raw) {
+        amount += raw;
+    }
+
+    int getCost() const {
+        return cost;
+    }
 };
+
 
 class DefFactory: public Factory
 {
-private:
-    int speed = 1;
-    int cost = 50;
-    int max_per_round = 2;
 public:
-    DefFactory();
+    DefFactory() : Factory(50, 0, 2) {};
 
-    int produce(int r) {
-        if (r <= max_per_round){
-            return (r);
-        }
-        else {
-            return max_per_round;
-        }
-    }
-
-    int getCost() {
-        return cost;
-    }
 };
+
 
 class AutoFactory: public Factory
 {
-private:
-    int speed = 4;
-    int cost = 20;
-    int max_per_round = 4;
 public:
-    AutoFactory();
-
-    int produce(int r) {
-        if (r <= max_per_round){
-            return (r);
-        }
-        else {
-            return max_per_round;
-        }
-    }
-
-    int getCost() {
-        return cost;
-    }
+    AutoFactory() : Factory(20, 0, 4) {};
 };
 
 #endif // FACTORY_H

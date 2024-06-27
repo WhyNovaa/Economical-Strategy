@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "player.h"
+
 #include <QMainWindow>
 #include <QPushButton>
 #include <QWidget>
