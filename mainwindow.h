@@ -10,12 +10,43 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QGridLayout>
+#include <QLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+
+class PlayerInterface : public QMainWindow {
+    Q_OBJECT
+public:
+    QWidget* wid;
+    QGridLayout* lay;
+
+    QPushButton* left_but;
+    QPushButton* right_but;
+
+    QLabel* money;
+    QLabel* raw;
+    QLabel* product;
+    QLabel* def_facts;
+    QLabel* auto_facts;
+
+    PlayerInterface(const Player& pl);
+
+    void show();
+    void close();
+
+    ~PlayerInterface();
+
+private slots:
+    void leftButtonClicked();
+    void rightButtonClicked();
+};
+
+
 
 class MainWindow : public QMainWindow
 {
@@ -28,14 +59,17 @@ public:
     void createStartMenu();
     void clearStartMenu();
 
+    void createGameMenu();
+
 private slots:
     void startButtonClicked();
 
 private:
     Ui::MainWindow *ui;
 
-    QVector<Player> players;
 
+    QVector<Player> players;
+    QVector<PlayerInterface*> players_interface;
 
     QPushButton* start_button;
     QWidget* start_widget;
@@ -46,4 +80,6 @@ private:
 
 
 };
+
+
 #endif // MAINWINDOW_H

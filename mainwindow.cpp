@@ -21,6 +21,7 @@ void MainWindow::createStartMenu() {
     start_widget = new QWidget;
     start_grid = new QGridLayout;
     start_label = new QLabel;
+
     connect(start_button, SIGNAL( clicked() ), this, SLOT( startButtonClicked() ));
 
     start_button->setText("Играть");
@@ -36,6 +37,12 @@ void MainWindow::createStartMenu() {
 
 }
 
+void MainWindow::createGameMenu() {
+    for(const auto& pl : players) {
+        players_interface.push_back(new PlayerInterface(pl));
+    }
+}
+
 void MainWindow::clearStartMenu() {
     delete start_button;
     delete start_spinBoxButton;
@@ -45,15 +52,88 @@ void MainWindow::clearStartMenu() {
 }
 
 void MainWindow::startButtonClicked() {
+    if(start_spinBoxButton->text().toInt() >= 2)
+    {
+        players = QVector<Player>(start_spinBoxButton->text().toInt());
+        players[0].setPriority(true);
 
-    players = QVector<Player>(start_spinBoxButton->text().toInt());
-    qDebug() << players.size();
+        start_widget->close();
+        clearStartMenu();
 
-    start_widget->close();
-    clearStartMenu();
+        createGameMenu();
+        players_interface[0]->show();
+    }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+
+//-------------------------PlayerInterface-------------------------
+
+PlayerInterface::PlayerInterface(const Player& pl) {
+    wid = new QWidget;
+    lay = new QGridLayout;
+
+    left_but = new QPushButton;
+    right_but = new QPushButton;
+
+    money = new QLabel;
+    raw = new QLabel;
+    product = new QLabel;
+    def_facts = new QLabel;
+    auto_facts = new QLabel;
+
+    left_but->setText("<-");
+    right_but->setText("->");
+
+    connect(left_but, SIGNAL( clicked() ), this, SLOT( leftButtonClicked() ));
+    connect(right_but, SIGNAL( clicked() ), this, SLOT( rightButtonClicked() ));
+
+    money->setText("Деньги: " + QString::number(pl.getMoney()));
+    raw->setText("Сырье: " + QString::number(pl.getRaw()));
+    product->setText("Готового сырья: " + QString::number(pl.getProduct()));
+    def_facts->setText("Обычных фабрик: " + QString::number(pl.getDefFacts().size()));
+    auto_facts->setText("Автоматических фабрик: " + QString::number(pl.getAutoFacts().size()));
+
+    lay->addWidget(money, 0, 0);
+    lay->addWidget(raw, 1, 0);
+    lay->addWidget(product, 2, 0);
+    lay->addWidget(def_facts, 3, 0);
+    lay->addWidget(auto_facts, 4, 0);
+
+    lay->addWidget(left_but, 5, 0);
+    lay->addWidget(right_but, 5, 5);
+    wid->setLayout(lay);
+}
+
+void PlayerInterface::show() {
+    wid->show();
+}
+
+void PlayerInterface::close() {
+    wid->close();
+}
+
+PlayerInterface::~PlayerInterface() {
+    delete wid;
+    delete lay;
+    delete money;
+    delete raw;
+    delete product;
+    delete def_facts;
+    delete auto_facts;
+}
+
+void PlayerInterface::rightButtonClicked() {
+    //здесь реализация перехода к другому интерфейсу влево
+    qDebug() << "left";
+}
+
+void PlayerInterface::leftButtonClicked() {
+    //здесь реализация перехода к другому интерфейсу вправо
+    qDebug() << "right";
 }
