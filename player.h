@@ -8,8 +8,6 @@
 class Player
 {
 private:
-    bool in_game;
-
     bool priority;
     int money;
     int raw;
@@ -21,10 +19,9 @@ private:
     // 40 за готовое сырье
 public:
     Player();
-    Player(const bool& _in_game, const bool& _priority, const int& _money, const int& _raw, const int& _product,
+    Player(const bool& _priority, const int& _money, const int& _raw, const int& _product,
            const QVector<DefFactory>& _def_fact, const QVector<AutoFactory>& _auto_fact);
 
-    void setInGame(const bool& _in_game);
     void setPriority(const bool& _priority);
     void setMoney(const int& _money);
     void setRaw(const int& raw);
@@ -32,7 +29,6 @@ public:
     void setDefFacts(const QVector<DefFactory>& _def_facts);
     void setAutoFacts(const QVector<AutoFactory>& _auto_facts);
 
-    bool getInGame() const;
     bool getPriority() const;
     int getMoney() const;
     int getRaw() const;
