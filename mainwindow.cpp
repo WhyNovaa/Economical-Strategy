@@ -10,18 +10,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("Economical Strategy");
 
-    createStart();
+    createStartMenu();
 
 }
 
-void MainWindow::createStart() {
+void MainWindow::createStartMenu() {
 
     start_button = new QPushButton;
     start_spinBoxButton = new QSpinBox;
     start_widget = new QWidget;
     start_grid = new QGridLayout;
     start_label = new QLabel;
-    connect(start_button, SIGNAL( clicked() ), this, SLOT( start() ));
+    connect(start_button, SIGNAL( clicked() ), this, SLOT( startButtonClicked() ));
 
     start_button->setText("Играть");
     start_label->setText("Введите количество игроков");
@@ -36,16 +36,23 @@ void MainWindow::createStart() {
 
 }
 
-void MainWindow::clearStart() {
+void MainWindow::clearStartMenu() {
     delete start_button;
     delete start_spinBoxButton;
     delete start_grid;
     delete start_label;
     delete start_widget;
 }
-void MainWindow::startClicked() {
 
+void MainWindow::startButtonClicked() {
+
+    players = QVector<Player>(start_spinBoxButton->text().toInt());
+    qDebug() << players.size();
+
+    start_widget->close();
+    clearStartMenu();
 }
+
 MainWindow::~MainWindow()
 {
     delete ui;

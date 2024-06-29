@@ -3,6 +3,7 @@
 
 #include "player.h"
 
+#include <qDebug>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QWidget>
@@ -24,12 +25,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void createStart();
-    void clearStart();
+    void createStartMenu();
+    void clearStartMenu();
+
 private slots:
-    void startClicked();
+    void startButtonClicked();
+
 private:
     Ui::MainWindow *ui;
+
+    QVector<Player> players;
+
 
     QPushButton* start_button;
     QWidget* start_widget;
