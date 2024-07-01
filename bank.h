@@ -27,11 +27,11 @@ public:
 
     void resetInsurance(); // сброс списка застраховавшихся
 
-    int payCredit(Player player, int money);
+    int payCredit(Player& player, int money);
 
-    bool credit(Player player, int money); //выдача кредита
+    bool credit(Player& player, int money); //выдача кредита
 
-    bool buyInsurance(Player player); //покупка страховки должника
+    bool buyInsurance(Player& player, int money); //покупка страховки
 
     QVector<Player> checkCredits(); //проверка списка должников
 

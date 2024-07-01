@@ -23,9 +23,14 @@ void Bank::auction(QVector<Player> players, QVector<std::pair<int, int>> offers)
 
 }//нужно прописать момент с балансом цен через просмотр баланса цен либо через понижение цены на условно 20%
 
-bool Bank:: credit(Player player, int money) {
+bool Bank:: credit(Player& player, int money) {
+    for (const auto &it: credit_defaulters) {
+        if (it.pl.getID() == player.getID()) {
+            return -1;
+        }
+    }
     if (player.getMoney() < money) {
-        return 0;
+         return 0;
     }
     else{
         player.setMoney(player.getMoney() - money);
@@ -33,7 +38,7 @@ bool Bank:: credit(Player player, int money) {
         credit_defaulters.push_back(p1);
         return 1;
     }
-}//взятие кредита, 0, если не смог купить, 1,если смог купить
+}//взятие кредита, 0, если не смог купить, 1,если смог купить, -1 если уже взял кредит
 
 QVector<Player> Bank:: checkCredits() {
     QVector <Player>v1;
@@ -45,7 +50,7 @@ QVector<Player> Bank:: checkCredits() {
     return v1;
 } //проверка списка должников, возвращает Qvector просрочивших оплату кредита
 
-int Bank::payCredit(Player player, int money){
+int Bank::payCredit(Player& player, int money){
     if (player.getMoney() < money) {
         return -1;
     }   //функция возвращает в mainwindow -1, если игрок не может оплатить кредит
@@ -53,7 +58,7 @@ int Bank::payCredit(Player player, int money){
     else{
         player.setMoney(player.getMoney() - money);
         for (auto &it: credit_defaulters) {
-            if (it.pl.getId() == player.getId()) {
+            if (it.pl.getID() == player.getID()) {
                 it.balance -= money;
                 if (it.balance > 0){
                     return it.balance;
@@ -70,7 +75,7 @@ int Bank::payCredit(Player player, int money){
     }
 }
 
-bool Bank:: buyInsurance(Player player, int money) {
+bool Bank:: buyInsurance(Player& player, int money) {
     if (player.getMoney() < money) {
         return 0;
     }
