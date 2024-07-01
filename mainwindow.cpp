@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+int MainWindow::current_ind = 0;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -39,8 +40,9 @@ void MainWindow::createStartMenu() {
 
 void MainWindow::createGameMenu() {
     for(const auto& pl : players) {
-        players_interface.push_back(new PlayerInterface(pl));
+        players_interface.push_back(new PlayerInterface(pl, this));
     }
+    players_interface[0]->setAsMainWindow();
 }
 
 void MainWindow::clearStartMenu() {
@@ -70,17 +72,41 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::update() {
 
+}
 
+void MainWindow::rightButtonClicked() {
+    //здесь реализация перехода к другому интерфейсу влево
+    qDebug() << "left";
+    players_interface[current_ind++]->close();
+    if(current_ind > players.size() - 1) {
+        current_ind = 0;
+    }
+    players_interface[current_ind]->show();
+    update();
+}
+
+void MainWindow::leftButtonClicked() {
+    //здесь реализация перехода к другому интерфейсу вправо
+    qDebug() << "right";
+    players_interface[current_ind--]->close();
+    if(current_ind < 0) {
+        current_ind = players.size() - 1;
+    }
+    players_interface[current_ind]->show();
+    update();
+}
 //-------------------------PlayerInterface-------------------------
 
-PlayerInterface::PlayerInterface(const Player& pl) {
+PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     wid = new QWidget;
     lay = new QGridLayout;
 
     left_but = new QPushButton;
     right_but = new QPushButton;
 
+    name = new QLabel;
     money = new QLabel;
     raw = new QLabel;
     product = new QLabel;
@@ -90,26 +116,31 @@ PlayerInterface::PlayerInterface(const Player& pl) {
     left_but->setText("<-");
     right_but->setText("->");
 
-    connect(left_but, SIGNAL( clicked() ), this, SLOT( leftButtonClicked() ));
-    connect(right_but, SIGNAL( clicked() ), this, SLOT( rightButtonClicked() ));
+    connect(left_but, SIGNAL( clicked() ), w, SLOT( leftButtonClicked() ));
+    connect(right_but, SIGNAL( clicked() ), w, SLOT( rightButtonClicked() ));
 
+    name->setText("Игрок " + QString::number(pl.getID()));
     money->setText("Деньги: " + QString::number(pl.getMoney()));
     raw->setText("Сырье: " + QString::number(pl.getRaw()));
     product->setText("Готового сырья: " + QString::number(pl.getProduct()));
     def_facts->setText("Обычных фабрик: " + QString::number(pl.getDefFacts().size()));
     auto_facts->setText("Автоматических фабрик: " + QString::number(pl.getAutoFacts().size()));
 
-    lay->addWidget(money, 0, 0);
-    lay->addWidget(raw, 1, 0);
-    lay->addWidget(product, 2, 0);
-    lay->addWidget(def_facts, 3, 0);
-    lay->addWidget(auto_facts, 4, 0);
+    lay->addWidget(name, 0, 0);
+    lay->addWidget(money, 1, 0);
+    lay->addWidget(raw, 2, 0);
+    lay->addWidget(product, 3, 0);
+    lay->addWidget(def_facts, 4, 0);
+    lay->addWidget(auto_facts, 5, 0);
 
-    lay->addWidget(left_but, 5, 0);
-    lay->addWidget(right_but, 5, 5);
+    lay->addWidget(left_but, 6, 0);
+    lay->addWidget(right_but, 6, 5);
     wid->setLayout(lay);
 }
 
+void PlayerInterface::setAsMainWindow() {
+    //wid->setLayout(lay);
+}
 void PlayerInterface::show() {
     wid->show();
 }
@@ -128,12 +159,3 @@ PlayerInterface::~PlayerInterface() {
     delete auto_facts;
 }
 
-void PlayerInterface::rightButtonClicked() {
-    //здесь реализация перехода к другому интерфейсу влево
-    qDebug() << "left";
-}
-
-void PlayerInterface::leftButtonClicked() {
-    //здесь реализация перехода к другому интерфейсу вправо
-    qDebug() << "right";
-}

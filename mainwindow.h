@@ -22,30 +22,28 @@ QT_END_NAMESPACE
 class PlayerInterface : public QMainWindow {
     Q_OBJECT
 public:
+
+
     QWidget* wid;
     QGridLayout* lay;
 
     QPushButton* left_but;
     QPushButton* right_but;
 
+    QLabel* name;
     QLabel* money;
     QLabel* raw;
     QLabel* product;
     QLabel* def_facts;
     QLabel* auto_facts;
 
-    PlayerInterface(const Player& pl);
-
     void show();
     void close();
+    PlayerInterface(const Player& pl, const QMainWindow* w);
 
+    void setAsMainWindow();
     ~PlayerInterface();
-
-private slots:
-    void leftButtonClicked();
-    void rightButtonClicked();
 };
-
 
 
 class MainWindow : public QMainWindow
@@ -56,6 +54,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void update();
+    static int current_ind;
+
     void createStartMenu();
     void clearStartMenu();
 
@@ -64,9 +65,10 @@ public:
 private slots:
     void startButtonClicked();
 
+    void leftButtonClicked();
+    void rightButtonClicked();
 private:
     Ui::MainWindow *ui;
-
 
     QVector<Player> players;
     QVector<PlayerInterface*> players_interface;
@@ -78,8 +80,8 @@ private:
     QLabel* start_label;
 
 
-
 };
+
 
 
 #endif // MAINWINDOW_H
