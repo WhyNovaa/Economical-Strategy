@@ -11,12 +11,14 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    player.cpp
+    player.cpp \
+    bank.cpp
 
 HEADERS += \
     factory.h \
     mainwindow.h \
-    player.h
+    player.h \
+    bank.h
 
 FORMS += \
     mainwindow.ui

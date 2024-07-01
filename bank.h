@@ -1,41 +1,52 @@
 #ifndef BANK_H
 #define BANK_H
 #include <string>
-#include <vector>
+#include <QVector>
 #include <algorithm>
 #include "player.h"
 
+struct cred{
+    Player pl;
+    int balance;
+    int duration;
+    cred(Player p1, int Money): pl(p1), balance(Money){ duration = 12;}
+};
+
 class Bank {
 private:
-    std::vector<Player*> credit_defaulters; // Игроки, просрочившие кредит
-    std::vector<Player*> insured_players; // Игроки со страховкой
-    std::vector<Player*> all;
+
+    QVector<cred> credit_defaulters; // Игроки, просрочившие кредит
+    QVector<Player> insured_players; // Игроки со страховкой
+    QVector<Player> all;
 
 public:
 
-    void setCreditDefaulters(const std::vector<Player>& defaulterList) ;
+    Bank(QVector<Player> p) : all(p) {}
 
-    std::vector<Player*> getCreditDefaulters();
+    void auction(QVector<Player> players, QVector<std::pair<int, int>> offers);
 
-    void setInsuredPlayers(const std::vector<Player>& insuredList) ;
+    void resetInsurance(); // сброс списка застраховавшихся
 
-    std::vector<Player*> getInsuredPlayers();
+    int payCredit(Player player, int money);
+
+    bool credit(Player player, int money); //выдача кредита
+
+    bool buyInsurance(Player player); //покупка страховки должника
+
+    QVector<Player> checkCredits(); //проверка списка должников
 
     //геттеры и сеттеры
 
-    Bank(std::vector<Player>& p) : players(p) {}
+    void setCreditDefaulters(const QVector<cred> defaulterList);
 
-    void auction(std::vector<Player>& players, std::vector<std::pair<int, int>> offers);
+    void setInsuredPlayers(const QVector<Player> insuredList);
 
-    bool credit(Player& player, int money); //выдача кредита
+    QVector<cred> getCreditDefaulters();
 
-    std::vector<Player*> checkCredits(); //проверка списка должников
+    QVector<Player> getInsuredPlayers();
 
-    bool buyInsurance(Player& player); //покупка страховки должника
+    QVector<Player> getInsurance(); // получение списка застраховавшихся в этом месяце
 
-    std::vector<Player*> getInsurance(); // получение списка застраховавшихся в этом месяце
-
-    void resetInsurance(); // сброс списка застраховавшихся
 };
 
 #endif // BANK_H
