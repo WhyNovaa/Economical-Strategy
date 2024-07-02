@@ -27,6 +27,8 @@ void pass_check::on_pushButton_clicked()
     if((QString::fromStdString(sha1(pass.toStdString()))) == True_pass){
         emit signal_pass_check(1);
     }else{
+        ui->label->setText("Wrong password try again");
+        ui->lineEdit->clear();
         emit signal_pass_check(0);
     }
 }
