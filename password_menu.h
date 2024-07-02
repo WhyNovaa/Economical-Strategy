@@ -2,6 +2,7 @@
 #define PASSWORD_MENU_H
 
 #include <QDialog>
+#include <QFont>
 
 namespace Ui {
 class password_menu;

@@ -9,6 +9,18 @@ password_menu::password_menu(QWidget *parent)
     ui->setupUi(this);
     ui->lineEdit->setEchoMode(QLineEdit::Password);
 
+
+
+    QFont font = ui->label->font();
+    font.setPointSize(13);
+    font.setBold(true);
+    ui->label->setFont(font);
+    ui->label->setAlignment(Qt::AlignCenter);
+    ui->lineEdit->setFont(font);
+    ui->pushButton->setFont(font);
+
+
+
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
@@ -16,6 +28,8 @@ password_menu::password_menu(QWidget *parent)
 
     this->setPalette(palette);
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
+    this->setFixedSize(400, 200);
 }
 
 password_menu::~password_menu()
@@ -34,6 +48,7 @@ void password_menu::on_pushButton_clicked()
     if(i<=a){
         QString text = "игрок " + QString::number(i+1) + " введите пароль для этой игры";
         ui->label->setText(text);
+
         QString pass = ui->lineEdit->text();
         ui->lineEdit->clear();
         emit signal_pass_back(QString::fromStdString(sha1(pass.toStdString())));

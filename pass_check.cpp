@@ -9,13 +9,27 @@ pass_check::pass_check(QWidget *parent)
     ui->setupUi(this);
     ui->lineEdit->setEchoMode(QLineEdit::Password);
 
+
+
+    QFont font = ui->label->font();
+    font.setPointSize(13);
+    font.setBold(true);
+    ui->label->setFont(font);
+    ui->label->setAlignment(Qt::AlignCenter);
+    ui->lineEdit->setFont(font);
+    ui->pushButton->setFont(font);
+
+
+
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
-    bkgnd = bkgnd.scaled(this->size(), Qt::KeepAspectRatioByExpanding);
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
 
     this->setPalette(palette);
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
+    this->setFixedSize(400, 200);
 }
 
 pass_check::~pass_check()

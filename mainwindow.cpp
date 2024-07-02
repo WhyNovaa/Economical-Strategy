@@ -33,7 +33,16 @@ void MainWindow::createStartMenu() {
     connect(start_button, SIGNAL( clicked() ), this, SLOT( startButtonClicked() ));
 
     start_button->setText("Играть");
+
+    QFont font = start_button->font();
+    font.setPointSize(13);
+    font.setBold(true);
+    start_button->setFont(font);
+
     start_label->setText("Введите количество игроков");
+    start_label->setFont(font);
+
+    start_spinBoxButton->setFont(font);
 
     start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray }");
 
@@ -42,7 +51,7 @@ void MainWindow::createStartMenu() {
     start_grid->addWidget(start_button, 1, 0);
 
     start_widget->setLayout(start_grid);
-    start_widget->setFixedSize(300, 150);
+    start_widget->setFixedSize(400, 200);
 
 
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
