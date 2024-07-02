@@ -3,6 +3,7 @@
 
 int MainWindow::current_ind = 0;
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -27,6 +28,8 @@ void MainWindow::createStartMenu() {
 
     start_button->setText("Играть");
     start_label->setText("Введите количество игроков");
+
+    start_button->setStyleSheet("QPushButton { background-color: blue; color: white; }");;
 
     start_grid->addWidget(start_label, 0, 0);
     start_grid->addWidget(start_spinBoxButton, 0, 1);
