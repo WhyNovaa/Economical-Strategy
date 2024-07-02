@@ -11,7 +11,7 @@ QPushButton:hover {
 }
 
 QPushButton:pressed {
-    background-color: #3a8353;
+    background-color: #1c4f2e
 }
 
 QLabel {

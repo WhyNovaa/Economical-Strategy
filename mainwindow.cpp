@@ -44,7 +44,7 @@ void MainWindow::createStartMenu() {
 
     start_spinBoxButton->setFont(font);
 
-    start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray }");
+    start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray } QPushButton:hover {background-color: #398453} QPushButton:pressed {background-color: #1c4f2e}");
 
     start_grid->addWidget(start_label, 0, 0);
     start_grid->addWidget(start_spinBoxButton, 0, 1);
