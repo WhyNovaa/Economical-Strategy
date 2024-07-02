@@ -141,13 +141,26 @@ void MainWindow::slot_pass(QString password)
 }
 
 int flag = -1;
+QString check;
 void MainWindow::slot_pass_check(int answ)
 {
+    players_interface[current_ind]->close();
+    if(check == "right"){
+        current_ind++;
+    }
+    if(check == "left"){
+        current_ind--;
+    }
+    if(current_ind < 0) {
+        current_ind = players.size() - 1;
+    }
+    if(current_ind > players.size() - 1) {
+        current_ind = 0;
+    }
     flag = answ;
     if(flag == 1){
         pch->close();
         players_interface[current_ind]->show();
-        //update();
         flag = -1;
     }
 }
@@ -161,19 +174,18 @@ void MainWindow::rightButtonClicked() {
 
 
     qDebug() << "right";
-    current_ind++;
-    if(current_ind > players.size() - 1) {
-        current_ind = 0;
-    }
+    check = "right";
 
     pch = new pass_check(this);
     pch -> show();
 
-    players_interface[current_ind]->close();
-
     connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
     connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    emit signal_index(passwords[current_ind], current_ind);
+    if(current_ind+1> players.size() - 1){
+        emit signal_index(passwords[0], 0);
+    }else{
+        emit signal_index(passwords[current_ind+1], current_ind+1);
+    }
 }
 
 void MainWindow::leftButtonClicked() {
@@ -185,20 +197,19 @@ void MainWindow::leftButtonClicked() {
 
 
     qDebug() << "left";
-    current_ind--;
-    if(current_ind < 0) {
-        current_ind = players.size() - 1;
-    }
+    check = "left";
 
     pch = new pass_check(this);
     pch -> show();
     pch->activateWindow();
 
-    players_interface[current_ind]->close();
-
     connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
     connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    emit signal_index(passwords[current_ind], current_ind);
+    if (current_ind-1<0){
+        emit signal_index(passwords[players.size() - 1], players.size() - 1);
+    }else{
+        emit signal_index(passwords[current_ind - 1], current_ind - 1);
+    }
 }
 //-------------------------PlayerInterface-------------------------
 
