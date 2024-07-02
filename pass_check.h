@@ -17,7 +17,7 @@ public:
 signals:
     void signal_pass_check(int);
 public slots:
-    void slot_index(QString true_pass);
+    void slot_index(QString true_pass, int i);
 private slots:
     void on_pushButton_clicked();
 

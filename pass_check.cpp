@@ -24,9 +24,11 @@ pass_check::~pass_check()
 }
 
 QString True_pass;
-void pass_check::slot_index(QString true_pass)
+void pass_check::slot_index(QString true_pass, int i)
 {
     True_pass = true_pass;
+    QString text = "игрок " + QString::number(i+1) + " введите ваш пароль";
+    ui->label->setText(text);
 }
 
 void pass_check::on_pushButton_clicked()

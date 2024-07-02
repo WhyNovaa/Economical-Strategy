@@ -149,7 +149,7 @@ void MainWindow::rightButtonClicked() {
     pch -> show();
     connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
     connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    emit signal_index(passwords[current_ind]);
+    emit signal_index(passwords[current_ind], current_ind);
 }
 
 void MainWindow::leftButtonClicked() {
@@ -164,7 +164,7 @@ void MainWindow::leftButtonClicked() {
     pch -> show();
     connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
     connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    emit signal_index(passwords[current_ind]);
+    emit signal_index(passwords[current_ind], current_ind);
 }
 //-------------------------PlayerInterface-------------------------
 

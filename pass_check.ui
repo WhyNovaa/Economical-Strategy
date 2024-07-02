@@ -46,7 +46,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>введите пароль</string>
+    <string/>
    </property>
   </widget>
  </widget>
