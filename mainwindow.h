@@ -45,6 +45,12 @@ public:
 
     void setAsMainWindow();
     ~PlayerInterface();
+
+
+    QPixmap bkgnd;
+    // bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+   // palette.setBrush(QPalette::Window, bkgnd);
 };
 
 

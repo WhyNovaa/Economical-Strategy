@@ -205,11 +205,8 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     lay->addWidget(left_but, 6, 0);
     lay->addWidget(right_but, 6, 5);
     wid->setLayout(lay);
-}
 
-void PlayerInterface::show() {
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
-    qDebug() << bkgnd.isNull();
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
@@ -219,6 +216,9 @@ void PlayerInterface::show() {
 
     wid->setWindowFlags(Qt::WindowStaysOnTopHint);
     wid->setWindowState(Qt::WindowFullScreen);
+}
+
+void PlayerInterface::show() {
 
     wid->show();
 }
