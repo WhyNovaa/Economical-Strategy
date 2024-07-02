@@ -32,12 +32,26 @@ public:
     QPushButton* left_but;
     QPushButton* right_but;
 
+    QPushButton* make_bid;
+    QPushButton* produce;
+    QPushButton* upgr_fact;
+    QPushButton* make_credit;
+    QPushButton* insurance;
+    // QPushButton*
+
+
+
+    // static QPushButton* left_but;
+    // static QPushButton* right_but;
+
     QLabel* name;
     QLabel* money;
     QLabel* raw;
     QLabel* product;
     QLabel* def_facts;
     QLabel* auto_facts;
+    // QLabel* raw_bid;
+    // QLabel* prod_bid;
 
     void show();
     void close();
@@ -45,6 +59,13 @@ public:
 
     void setAsMainWindow();
     ~PlayerInterface();
+
+
+    void setLeftBtnEn(bool b);
+    void setRightBtnEn(bool b);
+
+    // static void setLeftBtnEn(bool b);
+    // static void setRightBtnEn(bool b);
 
 
     QPixmap bkgnd;
