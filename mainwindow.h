@@ -81,6 +81,7 @@ private:
     QVector<PlayerInterface*> players_interface;
 
     QPushButton* start_button;
+
     QWidget* start_widget;
     QSpinBox* start_spinBoxButton;
     QGridLayout* start_grid;
