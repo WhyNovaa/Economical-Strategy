@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     this->setWindowTitle("Economical Strategy");
+    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
 
     createStartMenu();
 
@@ -32,7 +34,7 @@ void MainWindow::createStartMenu() {
     start_button->setText("Играть");
     start_label->setText("Введите количество игроков");
 
-    start_button->setStyleSheet("QPushButton { background-color: blue; color: white; }");
+    start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray }");
 
     start_grid->addWidget(start_label, 0, 0);
     start_grid->addWidget(start_spinBoxButton, 0, 1);
@@ -40,8 +42,17 @@ void MainWindow::createStartMenu() {
 
     start_widget->setLayout(start_grid);
     start_widget->setFixedSize(300, 150);
-    start_widget->show();
 
+
+    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+    start_widget->setPalette(palette);
+
+    start_widget->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
+    start_widget->show();
 }
 
 void MainWindow::createGameMenu() {
@@ -71,7 +82,17 @@ void MainWindow::startButtonClicked() {
 
         //сначала пароль
         pm = new password_menu(this);
+
+        QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+        bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+        QPalette palette;
+        palette.setBrush(QPalette::Window, bkgnd);
+        pm->setPalette(palette);
+
+        pm->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
         pm->show();
+
 
         connect(this, &MainWindow::signal_pass, pm, &password_menu::slot);
         connect(pm, &password_menu::signal_pass_back, this, &MainWindow::slot_pass);
@@ -187,6 +208,18 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 }
 
 void PlayerInterface::show() {
+    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    qDebug() << bkgnd.isNull();
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+    wid->setPalette(palette);
+
+    wid->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
+    wid->setWindowFlags(Qt::WindowStaysOnTopHint);
+    wid->setWindowState(Qt::WindowFullScreen);
+
     wid->show();
 }
 

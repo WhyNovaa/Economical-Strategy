@@ -8,6 +8,14 @@ pass_check::pass_check(QWidget *parent)
 {
     ui->setupUi(this);
     ui->lineEdit->setEchoMode(QLineEdit::Password);
+
+    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::KeepAspectRatioByExpanding);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+
+    this->setPalette(palette);
+    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
 }
 
 pass_check::~pass_check()
