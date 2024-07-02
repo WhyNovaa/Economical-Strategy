@@ -15,6 +15,12 @@ void Bank:: setInsuredPlayers(const QVector<Player> insuredList) {
 QVector<Player>Bank:: getInsuredPlayers() {
     return insured_players;
 }
+
+bool Bank::checkGameOver()
+{
+    return all.size() == 1;
+}
+
 // получение qvector -- списка застраховавшихся в этом месяце
 //геттеры и сеттеры
 

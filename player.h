@@ -48,6 +48,8 @@ public:
     void makeBet(const int& bet);
     bool checkIfInGame();
 
+
+
     void roundUpdate(); //обновляет все за ход
 };
 

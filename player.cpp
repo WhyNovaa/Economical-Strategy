@@ -33,6 +33,7 @@ void Player::setDefaultSettings() {
 }
 
 void Player::makeBet(const int& bet) {  }
+
 bool Player::checkIfInGame() {
     return (money >= 0);
 }

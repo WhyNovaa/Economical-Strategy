@@ -26,6 +26,7 @@ class PlayerInterface : public QMainWindow {
 public:
 
 
+    Player current_player;
     QWidget* wid;
     QGridLayout* lay;
 
@@ -63,6 +64,7 @@ public:
 
     void setLeftBtnEn(bool b);
     void setRightBtnEn(bool b);
+    void updateData();
 
     // static void setLeftBtnEn(bool b);
     // static void setRightBtnEn(bool b);

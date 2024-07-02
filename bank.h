@@ -47,6 +47,8 @@ public:
 
     QVector<Player> getInsurance(); // получение списка застраховавшихся в этом месяце
 
+    bool checkGameOver();
+
 };
 
 #endif // BANK_H
