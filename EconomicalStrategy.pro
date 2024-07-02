@@ -28,7 +28,6 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui \
-    mainwindow.ui \
     pass_check.ui \
     password_menu.ui
 

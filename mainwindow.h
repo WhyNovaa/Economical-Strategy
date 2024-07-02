@@ -73,7 +73,7 @@ public slots:
     void slot_pass_check(int);
 signals:
     void signal_pass(int);
-    void signal_index(QString);
+    void signal_index(QString, int);
 private:
     Ui::MainWindow *ui;
 
