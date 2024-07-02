@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include"password_menu.h"
+#include<QString>
+#include<QVector>
 
 int MainWindow::current_ind = 0;
 
@@ -53,6 +56,8 @@ void MainWindow::clearStartMenu() {
     delete start_widget;
 }
 
+QVector <QString> passwords; // тут будут храниться пароли игроков
+
 void MainWindow::startButtonClicked() {
     if(start_spinBoxButton->text().toInt() >= 2)
     {
@@ -62,8 +67,16 @@ void MainWindow::startButtonClicked() {
         start_widget->close();
         clearStartMenu();
 
-        createGameMenu();
-        players_interface[0]->show();
+        //сначала пароль
+        pm = new password_menu(this);
+        pm->show();
+
+        connect(this, &MainWindow::signal_pass, pm, &password_menu::slot);
+        connect(pm, &password_menu::signal_pass_back, this, &MainWindow::slot_pass);
+        emit signal_pass(players.size());
+
+        /*createGameMenu();
+        players_interface[0]->show();*/ //создадим после ввода паролей
     }
 }
 
@@ -83,8 +96,36 @@ void MainWindow::rightButtonClicked() {
     if(current_ind > players.size() - 1) {
         current_ind = 0;
     }
-    players_interface[current_ind]->show();
-    update();
+
+    pch = new pass_check(this);
+    pch -> show();
+    connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
+    connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
+    emit signal_index(passwords[current_ind]);
+}
+
+void MainWindow::slot_pass(QString password)
+{
+    if(password == "end"){
+        pm->close();
+
+        createGameMenu();
+        players_interface[0]->show();
+    }else{
+        passwords.push_back(password);
+    }
+}
+
+int flag = -1;
+void MainWindow::slot_pass_check(int answ)
+{
+    flag = answ;
+    if(flag == 1){
+        pch->close();
+        players_interface[current_ind]->show();
+        update();
+        flag = -1;
+    }
 }
 
 void MainWindow::leftButtonClicked() {
@@ -94,8 +135,12 @@ void MainWindow::leftButtonClicked() {
     if(current_ind < 0) {
         current_ind = players.size() - 1;
     }
-    players_interface[current_ind]->show();
-    update();
+
+    pch = new pass_check(this);
+    pch -> show();
+    connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
+    connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
+    emit signal_index(passwords[current_ind]);
 }
 //-------------------------PlayerInterface-------------------------
 
@@ -158,4 +203,3 @@ PlayerInterface::~PlayerInterface() {
     delete def_facts;
     delete auto_facts;
 }
-

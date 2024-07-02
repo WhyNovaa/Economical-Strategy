@@ -11,17 +11,25 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    pass_check.cpp \
+    password_menu.cpp \
     player.cpp \
-    bank.cpp
+    bank.cpp \
+    sha1.cpp
 
 HEADERS += \
     factory.h \
     mainwindow.h \
+    pass_check.h \
+    password_menu.h \
     player.h \
-    bank.h
+    bank.h \
+    sha1.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    pass_check.ui \
+    password_menu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

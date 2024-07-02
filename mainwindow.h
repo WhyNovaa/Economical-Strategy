@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "player.h"
+#include<password_menu.h>
+#include"pass_check.h"
 
 #include <qDebug>
 #include <QMainWindow>
@@ -64,9 +66,14 @@ public:
 
 private slots:
     void startButtonClicked();
-
     void leftButtonClicked();
     void rightButtonClicked();
+public slots:
+    void slot_pass(QString password);
+    void slot_pass_check(int);
+signals:
+    void signal_pass(int);
+    void signal_index(QString);
 private:
     Ui::MainWindow *ui;
 
@@ -79,7 +86,8 @@ private:
     QGridLayout* start_grid;
     QLabel* start_label;
 
-
+    password_menu *pm;
+    pass_check *pch;
 };
 
 
