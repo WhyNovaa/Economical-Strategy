@@ -33,7 +33,44 @@ void Player::setDefaultSettings() {
 }
 
 void Player::makeBet(const int& bet) {  }
-
 bool Player::checkIfInGame() {
     return (money >= 0);
+}
+
+// 20 монет за 1 сырья
+// 40 за готовое сырье
+void Player::payPerRound() {
+    money -= 20 * raw + 40 * product;
+}
+
+void Player::upgradeFacts(const int& amount) {
+    for(auto& i : def_facts) {
+        if(i.getAmount() != 0) {
+            raw += i.getAmount();
+            i.setAmount(0);
+        }
+    }
+    def_facts.erase(def_facts.begin() + def_facts.size() - amount, def_facts.end());
+    upgrade_facts.push_back({amount, 0});
+}
+void Player::updateUpgrade() {
+    bool flag = true;
+    while(flag) {
+        flag = false;
+        for(int i = 0; i < upgrade_facts.size(); i++) {
+            if(upgrade_facts[i].second == 9) {
+                upgrade_facts.erase(upgrade_facts.begin() + i);
+                flag = true;
+                break;
+            }
+        }
+    }
+}
+
+void Player::roundUpdate() {
+    for(auto& i : upgrade_facts) {
+        i.second++;
+    }
+    payPerRound();
+    updateUpgrade();
 }

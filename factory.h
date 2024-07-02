@@ -27,7 +27,8 @@ public:
     }
 
     virtual int getCost() const = 0;
-
+    virtual int getAmount() const = 0;
+    virtual void setAmount(const int& _amount) = 0;
     virtual ~Factory() {};
 };
 
@@ -36,7 +37,10 @@ class DefFactory: public Factory
 {
 public:
     DefFactory() : Factory(50, 0, 2) {};
+
     int getCost() const override { return cost; }
+    int getAmount() const override { return amount; }
+    void setAmount(const int& _amount) override { amount = _amount; }
 
     virtual ~DefFactory() {};
 };
@@ -46,7 +50,10 @@ class AutoFactory: public Factory
 {
 public:
     AutoFactory() : Factory(20, 0, 4) {};
+
     int getCost() const override { return cost; }
+    int getAmount() const override { return amount; }
+    void setAmount(const int& _amount) override { amount = _amount; }
 
     virtual ~AutoFactory() {};
 };

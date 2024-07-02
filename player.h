@@ -15,11 +15,12 @@ private:
     int product;
     QVector<DefFactory> def_facts;
     QVector<AutoFactory> auto_facts;
-
+    QVector<QPair<int, int>> upgrade_facts;
     // 20 монет за 1 сырья
     // 40 за готовое сырье
 public:
     static int next_ID;
+
     Player();
     Player(const bool& _priority, const int& _money, const int& _raw, const int& _product,
            const QVector<DefFactory>& _def_fact, const QVector<AutoFactory>& _auto_fact);
@@ -39,9 +40,15 @@ public:
     QVector<DefFactory> getDefFacts() const;
     QVector<AutoFactory> getAutoFacts() const;
 
+    void upgradeFacts(const int& amount);
+    void updateUpgrade();
+
+    void payPerRound();
     void setDefaultSettings();
     void makeBet(const int& bet);
     bool checkIfInGame();
+
+    void roundUpdate(); //обновляет все за ход
 };
 
 #endif // PLAYER_H

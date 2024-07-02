@@ -48,7 +48,6 @@ void MainWindow::createGameMenu() {
     for(const auto& pl : players) {
         players_interface.push_back(new PlayerInterface(pl, this));
     }
-    players_interface[0]->setAsMainWindow();
 }
 
 void MainWindow::clearStartMenu() {
@@ -62,7 +61,7 @@ void MainWindow::clearStartMenu() {
 QVector <QString> passwords; // тут будут храниться пароли игроков
 
 void MainWindow::startButtonClicked() {
-    if(start_spinBoxButton->text().toInt() >= 2)
+    if(start_spinBoxButton->text().toInt() >= 2 && start_spinBoxButton->text().toInt() <= 6)
     {
         players = QVector<Player>(start_spinBoxButton->text().toInt());
         players[0].setPriority(true);
@@ -92,20 +91,6 @@ void MainWindow::update() {
 
 }
 
-void MainWindow::rightButtonClicked() {
-    //здесь реализация перехода к другому интерфейсу влево
-    qDebug() << "left";
-    players_interface[current_ind++]->close();
-    if(current_ind > players.size() - 1) {
-        current_ind = 0;
-    }
-
-    pch = new pass_check(this);
-    pch -> show();
-    connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
-    connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    emit signal_index(passwords[current_ind]);
-}
 
 void MainWindow::slot_pass(QString password)
 {
@@ -131,9 +116,24 @@ void MainWindow::slot_pass_check(int answ)
     }
 }
 
-void MainWindow::leftButtonClicked() {
+void MainWindow::rightButtonClicked() {
     //здесь реализация перехода к другому интерфейсу вправо
     qDebug() << "right";
+    players_interface[current_ind++]->close();
+    if(current_ind > players.size() - 1) {
+        current_ind = 0;
+    }
+
+    pch = new pass_check(this);
+    pch -> show();
+    connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
+    connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
+    emit signal_index(passwords[current_ind]);
+}
+
+void MainWindow::leftButtonClicked() {
+    //здесь реализация перехода к другому интерфейсу влево
+    qDebug() << "left";
     players_interface[current_ind--]->close();
     if(current_ind < 0) {
         current_ind = players.size() - 1;
@@ -186,9 +186,6 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     wid->setLayout(lay);
 }
 
-void PlayerInterface::setAsMainWindow() {
-    //wid->setLayout(lay);
-}
 void PlayerInterface::show() {
     wid->show();
 }
