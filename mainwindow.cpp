@@ -265,8 +265,6 @@ void MainWindow::leftButtonClicked() {
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
-
-    players[0].setStatus("out");
 }
 
 void MainWindow::upgradeFactorySlot() {
