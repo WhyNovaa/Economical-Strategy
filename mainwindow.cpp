@@ -10,7 +10,7 @@ int MainWindow::current_ind = 0;
 
 QVector <QString> passwords; // тут будут храниться пароли игроков
 QRandomGenerator *rg = QRandomGenerator::global();
-int session_key = rg->bounded(100000, 1000000);
+int session_key = rg->bounded(100, 1000);
 QVector <int> money_backup;    //откат денюжек
 QVector <int> raw_backup;
 QVector <int> product_backup;
