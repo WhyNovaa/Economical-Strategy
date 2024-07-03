@@ -8,6 +8,8 @@ bet_dialog:: bet_dialog(int cur_raw_count, int cur_prod_count, int cur_raw_price
     prod_price = new QLineEdit;
     raw_price->setValidator(val1);
     prod_price->setValidator(val1);
+    raw_price->setSizePolicy(QSizePolicy());
+    prod_price->setSizePolicy(QSizePolicy());
     QPushButton* pcmdOk = new QPushButton("&Сделать ставку");
     QPushButton* pcmdCancel = new QPushButton("&Выйти");
     connect(pcmdOk, SIGNAL(clicked()), SLOT(accept()));
@@ -21,14 +23,15 @@ bet_dialog:: bet_dialog(int cur_raw_count, int cur_prod_count, int cur_raw_price
     QHBoxLayout *h2 = new  QHBoxLayout;
     QHBoxLayout *h3 = new  QHBoxLayout;
     QHBoxLayout *h4 = new  QHBoxLayout;
+    QHBoxLayout *h5 = new  QHBoxLayout;
     QVBoxLayout *v1 =  new  QVBoxLayout;
     QLabel *l1 = new QLabel("Введите сумму, за которую хотите купить сырьё");
     QLabel *l2 = new QLabel("Введите сумму, за которую хотите продать продукцию");
     h2->addWidget(lrc); h2->addWidget(lpc);
     h3->addWidget(lrp); h3->addWidget(lpp);
-    h4->addWidget(l1);  h4->addWidget(raw_price);  h4->addWidget(l2);  h4->addWidget(prod_price);
+    h4->addWidget(l1);  h4->addWidget(raw_price);  h5->addWidget(l2);  h5->addWidget(prod_price);
     h1->addWidget(pcmdOk); h1->addWidget(pcmdCancel);
-    v1->addLayout(h2); v1->addLayout(h3); v1->addLayout(h4); v1->addWidget(advice); v1->addLayout(h1);
+    v1->addLayout(h2); v1->addLayout(h3); v1->addLayout(h4); v1->addLayout(h5); v1->addWidget(advice); v1->addLayout(h1);
     setLayout(v1);
     this->resize(800, 200);
     this->setMinimumSize(800, 200);
