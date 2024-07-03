@@ -11,23 +11,27 @@ CONFIG += c++17
 SOURCES += \
     bet_dialog.cpp \
     credit_dialog.cpp \
+    fabric_dialog.cpp \
     main.cpp \
     mainwindow.cpp \
     pass_check.cpp \
     password_menu.cpp \
     player.cpp \
     bank.cpp \
+    product_dialog.cpp \
     sha1.cpp
 
 HEADERS += \
     bet_dialog.h \
     credit_dialog.h \
+    fabric_dialog.h \
     factory.h \
     mainwindow.h \
     pass_check.h \
     password_menu.h \
     player.h \
     bank.h \
+    product_dialog.h \
     sha1.h
 
 FORMS += \

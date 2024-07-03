@@ -46,31 +46,35 @@ void Player::payPerRound() {
     money -= 20 * raw + 40 * product;
 }
 bool Player::putRawInFabrics(const int& amount) {
-    if(amount % 2 != 0) {
-        return false;
-    }
-    int free_space_for_raw = def_facts.size() + auto_facts.size();
+    int free_space_for_raw = def_facts.size() * 2 + auto_facts.size() * 4;
     for(const auto& fab : def_facts) {
         free_space_for_raw -= fab.getAmount();
     }
     for(const auto& fab : auto_facts) {
         free_space_for_raw -= fab.getAmount();
     }
-    if(free_space_for_raw <= 0) {
+    if(free_space_for_raw < amount) {
         return false;
     }
     for(auto& fab : def_facts) {
-        if(free_space_for_raw > 0 && fab.getAmount() == 0) {
-            fab.addRaw(2);
-            free_space_for_raw -= 2;
+        for(int i = 0; i < 2; i++)
+        {
+            if(free_space_for_raw > 0) {
+                fab.addRaw(1);
+                free_space_for_raw--;
+            }
         }
     }
     for(auto& fab : auto_facts) {
-        if(free_space_for_raw > 0 && fab.getAmount() == 0) {
-            fab.addRaw(4);
-            free_space_for_raw -= 4;
+        for(int i = 0; i < 4; i++)
+        {
+            if(free_space_for_raw > 0) {
+                fab.addRaw(1);
+                free_space_for_raw--;
+            }
         }
     }
+    raw -= amount;
     return true;
 }
 

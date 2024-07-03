@@ -274,14 +274,35 @@ void MainWindow::upgradeFactSlot() {
         if (amount == 0) {
             QMessageBox::information(this, "Улучшение фабрик", "Ошибка ввода данных, повторите попытку");
         } else if(amount > players[current_ind].getDefFacts().size()) {
-            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно фабрик");
+            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно фабрик, повторите попытку");
         }
         else if(amount * 3000 > players[current_ind].getMoney()) {
-            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно средств");
+            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно средств, повторите попытку");
         }
         else {
             players[current_ind].upgradeFacts(amount);
             QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
+            this->updatePlayers();
+        }
+        delete rec1;
+    }
+}
+void MainWindow::produceSlot() {
+    product_dialog *rec1 = new product_dialog(this);
+    rec1->show();
+    if(rec1->exec() == QDialog::Accepted) {
+        int amount = rec1->getAmount();
+        if (amount == 0) {
+            QMessageBox::information(this, "Переработка сырья", "Ошибка ввода данных, повторите попытку");
+        }
+        else if(amount > players[current_ind].getRaw()) {
+            QMessageBox::information(this, "Переработка сырья", "Недостаточно сырья, повторите попытку");
+        }
+        else if(!players[current_ind].putRawInFabrics(amount)) {
+            QMessageBox::information(this, "Переработка сырья", "Недостаточно места на фабриках, повторите попытку");
+        }
+        else {
+            QMessageBox::information(this, "Переработка сырья", "Операция выполнена успешно");
             this->updatePlayers();
         }
         delete rec1;
@@ -354,6 +375,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     produce = new QPushButton;
     produce->setText("Произвести");
+    connect(produce, SIGNAL(clicked()), w, SLOT(produceSlot()));
 
     make_credit = new QPushButton;
     make_credit->setText("Кредит");

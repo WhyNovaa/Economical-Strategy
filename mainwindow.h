@@ -17,6 +17,8 @@
 #include "credit_dialog.h"
 #include "bet_dialog.h"
 #include "fabric_dialog.h"
+#include "product_dialog.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -102,6 +104,7 @@ private slots:
     void creditSlot();
     void insuranceSlot();
     void upgradeFactSlot();
+    void produceSlot();
 public slots:
     void slot_pass(QString password);
     void slot_pass_check(int);
