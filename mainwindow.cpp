@@ -52,7 +52,7 @@ void MainWindow::createStartMenu() {
 
     start_grid->addWidget(start_label, 0, 0);
     start_grid->addWidget(start_spinBoxButton, 0, 1);
-    start_grid->addWidget(start_button, 1, 0);
+    start_grid->addWidget(start_button, 1, 0, 1, 2);
 
     start_widget->setLayout(start_grid);
     start_widget->setFixedSize(400, 200);
