@@ -11,14 +11,11 @@ public:
     Factory(const int& _cost, const int& _amount, const int& _max_per_round) : cost(_cost), amount(_amount), max_per_round(_max_per_round) {};
 
     int produce() {
-        if (amount > max_per_round) {
-            amount -= max_per_round;
-            return max_per_round;
-        }
-        else {
-            int temp = amount;
+        if(amount > 0) {
             amount = 0;
-            return temp;
+            return max_per_round;
+        } else {
+            return 0;
         }
     }
 

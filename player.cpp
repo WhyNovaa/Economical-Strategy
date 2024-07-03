@@ -43,16 +43,68 @@ bool Player::checkIfInGame() {
 void Player::payPerRound() {
     money -= 20 * raw + 40 * product;
 }
-
-void Player::upgradeFacts(const int& amount) {
-    for(auto& i : def_facts) {
-        if(i.getAmount() != 0) {
-            raw += i.getAmount();
-            i.setAmount(0);
+bool Player::putRawInFabrics(const int& amount) {
+    if(amount % 2 != 0) {
+        return false;
+    }
+    int free_space_for_raw = def_facts.size() + auto_facts.size();
+    for(const auto& fab : def_facts) {
+        free_space_for_raw -= fab.getAmount();
+    }
+    for(const auto& fab : auto_facts) {
+        free_space_for_raw -= fab.getAmount();
+    }
+    if(free_space_for_raw <= 0) {
+        return false;
+    }
+    for(auto& fab : def_facts) {
+        if(free_space_for_raw > 0 && fab.getAmount() == 0) {
+            fab.addRaw(2);
+            free_space_for_raw -= 2;
         }
     }
-    def_facts.erase(def_facts.begin() + def_facts.size() - amount, def_facts.end());
-    upgrade_facts.push_back({amount, 0});
+    for(auto& fab : auto_facts) {
+        if(free_space_for_raw > 0 && fab.getAmount() == 0) {
+            fab.addRaw(4);
+            free_space_for_raw -= 4;
+        }
+    }
+    return true;
+}
+
+bool Player::upgradeFacts(const int& amount) {
+    int counter = 0;
+    if(amount <= def_facts.size())
+    {
+        bool flag = true;
+        while(flag) {
+            flag = false;
+            for(int i = 0; i < def_facts.size(); i++) {
+                if(def_facts[i].getAmount() == 0 && counter < amount) {
+                    counter++;
+                    def_facts.erase(def_facts.begin() + i);
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if(counter < amount) {
+            int temp = amount - counter;
+            for(auto& fab : def_facts) {
+                if(counter < amount) {
+                    counter++;
+                    raw += fab.getAmount();
+                    fab.setAmount(0);
+                }
+            }
+            def_facts.erase(def_facts.begin(), def_facts.begin() + temp);
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 void Player::updateUpgrade() {
     bool flag = true;
@@ -60,6 +112,9 @@ void Player::updateUpgrade() {
         flag = false;
         for(int i = 0; i < upgrade_facts.size(); i++) {
             if(upgrade_facts[i].second == 9) {
+                for(int i = 0; i < upgrade_facts[i].first; i++) {
+                    auto_facts.push_back(AutoFactory());
+                }
                 upgrade_facts.erase(upgrade_facts.begin() + i);
                 flag = true;
                 break;
@@ -67,11 +122,19 @@ void Player::updateUpgrade() {
         }
     }
 }
-
+void Player::updateProduct() {
+    for(auto& fab : def_facts) {
+        product += fab.produce();
+    }
+    for(auto& fab : auto_facts) {
+        product += fab.produce();
+    }
+}
 void Player::roundUpdate() {
     for(auto& i : upgrade_facts) {
         i.second++;
     }
     payPerRound();
     updateUpgrade();
+    updateProduct();
 }
