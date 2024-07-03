@@ -196,15 +196,30 @@ void MainWindow::rightButtonClicked() {
     check = "right";
 
     players_interface[current_ind]->hide();
-    pch = new pass_check(this);
-    pch -> show();
+    if((current_ind+1 < players.size() && players[current_ind+1].getStatus()=="in") || (current_ind-1>=players.size() && players[0].getStatus()=="in")){
 
-    connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
-    connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
-    if(current_ind+1> players.size() - 1){
-        emit signal_index(passwords[0], 0);
-    }else{
-        emit signal_index(passwords[current_ind+1], current_ind+1);
+        pch = new pass_check(this);
+        pch -> show();
+        pch->activateWindow();
+
+        connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
+        connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
+        if (current_ind+1<players.size()){
+            emit signal_index(passwords[current_ind + 1], current_ind + 1);
+        }else{
+            emit signal_index(passwords[0], 0);
+        }
+    }
+    else{
+        players_interface[current_ind]->close();
+        current_ind++;
+        if(current_ind < 0) {
+            current_ind = players.size() - 1;
+        }
+        if(current_ind > players.size() - 1) {
+            current_ind = 0;
+        }
+        players_interface[current_ind]->show();
     }
 
     for(int i=0; i<players.size(); i++){
@@ -221,11 +236,12 @@ void MainWindow::leftButtonClicked() {
     // PlayerInterface::setLeftBtnEn(false);
     // PlayerInterface::setRightBtnEn(false);
 
-
     qDebug() << "left";
     check = "left";
 
-    players_interface[current_ind]->hide();
+    //players_interface[current_ind]->hide();
+    if((current_ind-1>=0 && players[current_ind-1].getStatus()=="in") || (current_ind-1<0 && players[players.size()-1].getStatus()=="in")){
+
     pch = new pass_check(this);
     pch -> show();
     pch->activateWindow();
@@ -237,12 +253,29 @@ void MainWindow::leftButtonClicked() {
     }else{
         emit signal_index(passwords[current_ind - 1], current_ind - 1);
     }
+    }
+    else{
+        players_interface[current_ind]->close();
+        current_ind--;
+        if(current_ind < 0) {
+            current_ind = players.size() - 1;
+        }
+        if(current_ind > players.size() - 1) {
+            current_ind = 0;
+        }
+        if(flag == 1){
+            pch->close();
+            players_interface[current_ind]->show();
+        }
+    }
 
     for(int i=0; i<players.size(); i++){
         if(money_backup[i]!=players[i].getMoney()*session_key){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
+
+    players[0].setStatus("out");
 }
 //-------------------------PlayerInterface-------------------------
 
