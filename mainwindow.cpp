@@ -125,21 +125,12 @@ void MainWindow:: updatePlayers() {
     }
 
 }
-void PlayerInterface:: setPlayer(const Player& g1) {
-    current_player = g1;
-}
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void PlayerInterface::updateData() {
-    money->setText("Деньги: " + QString::number(current_player.getMoney()));
-    raw->setText("Сырье: " + QString::number(current_player.getRaw()));
-    product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
-    def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
-    auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
-}
 
 
 void MainWindow::slot_pass(QString password)
@@ -277,6 +268,10 @@ void MainWindow::leftButtonClicked() {
 
     players[0].setStatus("out");
 }
+
+void MainWindow::upgradeFactorySlot() {
+
+}
 //-------------------------PlayerInterface-------------------------
 
 PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
@@ -336,6 +331,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     upgr_fact = new QPushButton;
     upgr_fact->setText("Улучшить фабрику");
+    connect(upgr_fact, SIGNAL(clicked()), w, SLOT( upgradeFactSlot()));
 
     make_bid = new QPushButton;
     make_bid->setText("Сделать ставку");
@@ -392,6 +388,18 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     wid->setWindowState(Qt::WindowFullScreen);
 
+}
+
+void PlayerInterface:: setPlayer(const Player& g1) {
+    current_player = g1;
+}
+
+void PlayerInterface::updateData() {
+    money->setText("Деньги: " + QString::number(current_player.getMoney()));
+    raw->setText("Сырье: " + QString::number(current_player.getRaw()));
+    product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
+    def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
+    auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
 }
 
 void PlayerInterface::show() {

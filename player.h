@@ -43,17 +43,19 @@ public:
     QVector<AutoFactory> getAutoFacts() const;
     QString getStatus() const;
 
-    void upgradeFacts(const int& amount);
+    bool upgradeFacts(const int& amount); //возвращает true - все норм, false - не смогло улучшить (сюда можно закинуть только кратное 2 количество)
     void updateUpgrade();
 
     void payPerRound();
+    void updateProduct(); //достаю все готовое сырье
+    bool putRawInFabrics(const int& amount); //возвращает true - все норм, false - не смогло засунуть сырье на переработку
     void setDefaultSettings();
     void makeBet(const int& bet);
     bool checkIfInGame();
 
 
 
-    void roundUpdate(); //обновляет все за ход
+    void roundUpdate(); //обновляет все за ход(вызывать в начале раунда)
 };
 
 #endif // PLAYER_H

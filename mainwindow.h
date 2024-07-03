@@ -38,7 +38,6 @@ public:
     QPushButton* upgr_fact;
     QPushButton* make_credit;
     QPushButton* insurance;
-    // QPushButton*
 
 
 
@@ -100,6 +99,7 @@ private slots:
     void auctionSlot();
     void creditSlot();
     void insuranceSlot();
+    void upgradeFactorySlot();
 public slots:
     void slot_pass(QString password);
     void slot_pass_check(int);
