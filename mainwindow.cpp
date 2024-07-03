@@ -3,10 +3,16 @@
 #include"password_menu.h"
 #include<QString>
 #include<QVector>
-
+#include<QRandomGenerator>
+#include<QDebug>
+#include<QMessageBox>
 
 int MainWindow::current_ind = 0;
 
+QVector <QString> passwords; // тут будут храниться пароли игроков
+QRandomGenerator *rg = QRandomGenerator::global();
+int session_key = rg->bounded(100000, 1000000);
+QVector <int> money_backup; //откат денюжек
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("Economical Strategy");
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
-
 
     createStartMenu();
 
@@ -66,7 +71,7 @@ void MainWindow::createStartMenu() {
 }
 
 void MainWindow::createGameMenu() {
-    for(const auto& pl : players) {
+    for(auto& pl : players) {
         players_interface.push_back(new PlayerInterface(pl, this));
     }
 }
@@ -78,8 +83,6 @@ void MainWindow::clearStartMenu() {
     delete start_label;
     delete start_widget;
 }
-
-QVector <QString> passwords; // тут будут храниться пароли игроков
 
 void MainWindow::startButtonClicked() {
     if(start_spinBoxButton->text().toInt() >= 2 && start_spinBoxButton->text().toInt() <= 6)
@@ -124,7 +127,6 @@ void PlayerInterface::updateData() {
     product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
     def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
     auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
-
 }
 
 
@@ -134,6 +136,11 @@ void MainWindow::slot_pass(QString password)
         pm->close();
 
         createGameMenu();
+
+        for(int i=0; i<players.size(); i++){
+            money_backup.push_back(players[i].getMoney()*session_key);
+        }
+
         players_interface[0]->show();
     }else{
         passwords.push_back(password);
@@ -186,6 +193,12 @@ void MainWindow::rightButtonClicked() {
     }else{
         emit signal_index(passwords[current_ind+1], current_ind+1);
     }
+
+    for(int i=0; i<players.size(); i++){
+        if(money_backup[i] != players[i].getMoney()*session_key){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
 }
 
 void MainWindow::leftButtonClicked() {
@@ -210,10 +223,16 @@ void MainWindow::leftButtonClicked() {
     }else{
         emit signal_index(passwords[current_ind - 1], current_ind - 1);
     }
+
+    for(int i=0; i<players.size(); i++){
+        if(money_backup[i]!=players[i].getMoney()*session_key){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
 }
 //-------------------------PlayerInterface-------------------------
 
-PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
+PlayerInterface::PlayerInterface(Player& pl, const QMainWindow* w) {
     current_player = pl;
     wid = new QWidget;
     lay = new QGridLayout;
@@ -288,7 +307,6 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     produce->setFont(font);
     make_credit->setFont(font);
     insurance->setFont(font);
-
     upgr_fact->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     make_bid->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     produce->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
@@ -323,6 +341,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     wid->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
 
     wid->setWindowState(Qt::WindowFullScreen);
+
 }
 
 void PlayerInterface::show() {
