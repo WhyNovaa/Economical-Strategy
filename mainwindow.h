@@ -63,6 +63,7 @@ public:
     void setPlayer(const Player& g1);
     void setLeftBtnEn(bool b);
     void setRightBtnEn(bool b);
+    void hide();
     void updateData();
 
     // static void setLeftBtnEn(bool b);

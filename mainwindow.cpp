@@ -195,6 +195,7 @@ void MainWindow::rightButtonClicked() {
     qDebug() << "right";
     check = "right";
 
+    players_interface[current_ind]->hide();
     pch = new pass_check(this);
     pch -> show();
 
@@ -224,6 +225,7 @@ void MainWindow::leftButtonClicked() {
     qDebug() << "left";
     check = "left";
 
+    players_interface[current_ind]->hide();
     pch = new pass_check(this);
     pch -> show();
     pch->activateWindow();
@@ -368,6 +370,14 @@ void PlayerInterface::close() {
     wid->close();
 }
 
+void PlayerInterface::hide(){
+    raw->setText("Сырье: ");
+    product->setText("Готового сырья: ");
+    def_facts->setText("Обычных фабрик: ");
+    auto_facts->setText("Автоматических фабрик: ");
+    money->setText("Деньги: ");
+}
+
 PlayerInterface::~PlayerInterface() {
     delete wid;
     delete lay;
@@ -385,6 +395,8 @@ void PlayerInterface::setLeftBtnEn(bool b) {
 void PlayerInterface::setRightBtnEn(bool b) {
     right_but->setEnabled(b);
 }
+
+
 
 //<----------------------------------Bank---------------------------------------------->
 void MainWindow:: auctionSlot() {
