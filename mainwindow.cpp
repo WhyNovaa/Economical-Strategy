@@ -11,8 +11,11 @@ int MainWindow::current_ind = 0;
 QVector <QString> passwords; // тут будут храниться пароли игроков
 QRandomGenerator *rg = QRandomGenerator::global();
 int session_key = rg->bounded(100000, 1000000);
-QVector <int> money_backup; //откат денюжек
-
+QVector <int> money_backup;    //откат денюжек
+QVector <int> raw_backup;
+QVector <int> product_backup;
+QVector <int> def_backup;
+QVector <int> auto_backup;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -124,6 +127,10 @@ void MainWindow:: updatePlayers() {
         players_interface[i]->setPlayer(players[i]);
         players_interface[i]->updateData();
         money_backup[i]=players[i].getMoney()*session_key;
+        raw_backup[i]=players[i].getRaw()*session_key;
+        product_backup[i]=players[i].getProduct()*session_key;
+        def_backup[i]=players[i].getDefFacts().size()*session_key;
+        auto_backup[i]=players[i].getAutoFacts().size()*session_key;
     }
     checkGameOver();
 }
@@ -144,6 +151,10 @@ void MainWindow::slot_pass(QString password)
 
         for(int i=0; i<players.size(); i++){
             money_backup.push_back(players[i].getMoney()*session_key);
+            raw_backup.push_back(players[i].getRaw()*session_key);
+            product_backup.push_back(players[i].getProduct()*session_key);
+            def_backup.push_back(players[i].getDefFacts().size()*session_key);
+            auto_backup.push_back(players[i].getAutoFacts().size()*session_key);
         }
 
         players_interface[0]->show();
@@ -185,7 +196,6 @@ void MainWindow::rightButtonClicked() {
     // PlayerInterface::setRightBtnEn(false);
 
     players_interface[current_ind]->hide();
-    update();
     qDebug() << "right";
     check = "right";
     qDebug()<<current_ind;
@@ -217,7 +227,7 @@ void MainWindow::rightButtonClicked() {
     }
 
     for(int i=0; i<players.size(); i++){
-        if(money_backup[i] != players[i].getMoney()*session_key){
+        if((money_backup[i]!=players[i].getMoney()*session_key) || (raw_backup[i]!=players[i].getRaw()*session_key) || (product_backup[i]!=players[i].getProduct()*session_key) || (def_backup[i]!=players[i].getDefFacts().size()*session_key) || (auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
@@ -266,7 +276,7 @@ void MainWindow::leftButtonClicked() {
     }
 
     for(int i=0; i<players.size(); i++){
-        if(money_backup[i]!=players[i].getMoney()*session_key){
+        if((money_backup[i]!=players[i].getMoney()*session_key) || (raw_backup[i]!=players[i].getRaw()*session_key) || (product_backup[i]!=players[i].getProduct()*session_key) || (def_backup[i]!=players[i].getDefFacts().size()*session_key) || (auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
