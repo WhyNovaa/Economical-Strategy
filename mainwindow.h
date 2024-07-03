@@ -42,7 +42,7 @@ public:
     QPushButton* upgr_fact;
     QPushButton* make_credit;
     QPushButton* insurance;
-
+    QPushButton* give_up;
 
 
     // static QPushButton* left_but;
@@ -95,6 +95,7 @@ public:
     void clearStartMenu();
 
     void createGameMenu();
+    void checkGameOver();
 
 private slots:
     void startButtonClicked();
@@ -105,6 +106,7 @@ private slots:
     void insuranceSlot();
     void upgradeFactSlot();
     void produceSlot();
+    void giveUpSlot();
 public slots:
     void slot_pass(QString password);
     void slot_pass_check(int);

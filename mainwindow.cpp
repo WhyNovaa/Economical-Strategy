@@ -122,7 +122,7 @@ void MainWindow:: updatePlayers() {
         players_interface[i]->updateData();
         money_backup[i]=players[i].getMoney()*session_key;
     }
-
+    checkGameOver();
 }
 
 MainWindow::~MainWindow()
@@ -217,6 +217,7 @@ void MainWindow::rightButtonClicked() {
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
+    updatePlayers();
 }
 
 void MainWindow::leftButtonClicked() {
@@ -264,6 +265,7 @@ void MainWindow::leftButtonClicked() {
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
+    updatePlayers();
 }
 
 void MainWindow::upgradeFactSlot() {
@@ -308,6 +310,10 @@ void MainWindow::produceSlot() {
         delete rec1;
     }
 }
+
+
+
+
 //-------------------------PlayerInterface-------------------------
 
 PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
@@ -385,6 +391,10 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     insurance->setText("Взять страховку");
     connect(insurance, SIGNAL(clicked()), w, SLOT(insuranceSlot()));
 
+    give_up = new QPushButton;
+    give_up->setText("Сдаться");
+    connect(give_up, SIGNAL(clicked()), w, SLOT(giveUpSlot()));
+
     upgr_fact->setFont(font);
     make_bid->setFont(font);
     produce->setFont(font);
@@ -397,21 +407,25 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     insurance->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
 
 
-    lay->addWidget(name, 0, 0, 1, 2);
-    lay->addWidget(money, 1, 0);
-    lay->addWidget(raw, 2, 0);
-    lay->addWidget(product, 3, 0);
-    lay->addWidget(def_facts, 4, 0);
-    lay->addWidget(auto_facts, 5, 0);
+    give_up->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
 
-    lay->addWidget(make_bid, 1, 1);
-    lay->addWidget(make_credit, 2, 1);
-    lay->addWidget(insurance, 3, 1);
-    lay->addWidget(produce, 4, 1);
-    lay->addWidget(upgr_fact, 5, 1);
 
-    lay->addWidget(left_but, 6, 0);
-    lay->addWidget(right_but, 6, 1);
+    lay->addWidget(give_up, 0, 0, 1, 2);
+    lay->addWidget(name, 1, 0, 1, 2);
+    lay->addWidget(money, 2, 0);
+    lay->addWidget(raw, 3, 0);
+    lay->addWidget(product, 4, 0);
+    lay->addWidget(def_facts, 5, 0);
+    lay->addWidget(auto_facts, 6, 0);
+
+    lay->addWidget(make_bid, 2, 1);
+    lay->addWidget(make_credit, 3, 1);
+    lay->addWidget(insurance, 4, 1);
+    lay->addWidget(produce, 5, 1);
+    lay->addWidget(upgr_fact, 6, 1);
+
+    lay->addWidget(left_but, 7, 0);
+    lay->addWidget(right_but, 7, 1);
 
     wid->setLayout(lay);
 
@@ -585,3 +599,60 @@ void MainWindow:: insuranceSlot() {
     this->updatePlayers();
 }
 
+
+
+
+//---------------------------------GameOver-----------------------------------------
+
+void MainWindow::giveUpSlot() {
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Сдаться", "Вы уверены, что хотите сдаться?", QMessageBox::Yes | QMessageBox::No);
+
+    if(reply == QMessageBox::No) {
+
+    }
+    else {
+        players[current_ind].setMoney(0);
+        players[current_ind].setPriority(0);
+        players[current_ind].setProduct(0);
+        players[current_ind].setRaw(0);
+        players[current_ind].setAutoFacts(QVector<AutoFactory>(0));
+        players[current_ind].setDefFacts(QVector<DefFactory>(0));
+        players[current_ind].setStatus("out");
+        b1->setAllPlayers(players);
+        updatePlayers();
+    }
+
+}
+
+
+
+void MainWindow::checkGameOver()
+{
+
+    for (const auto &it: players){
+        if (it.getMoney() >= 30000){
+            QMessageBox::warning(this, "Игра окончена", "Игрок " + QString::number(it.getID()) + " победил");
+            QApplication::quit();
+        }
+    }
+
+    int alive_players = 0;
+    for (const auto &it: players){
+        if (it.getStatus() != "out")
+            ++alive_players;
+    }
+    if (alive_players <= 1){
+        // Т.е. играть некому
+        for (const auto &it1: players){
+            if (it1.getStatus() != "out")
+            {
+                // Ищем победителя
+                QMessageBox::warning(this, "Игра окончена", "Игрок " + QString::number(it1.getID()) + " победил");
+                QApplication::quit();
+            }
+        }
+        QMessageBox::warning(this, "Игра окончена", "Победила дружба");
+        QApplication::quit();
+    }
+}
