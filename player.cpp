@@ -1,4 +1,5 @@
 #include "player.h"
+#include <qDebug>
 int Player::next_ID = 1;
 Player::Player() : ID(next_ID++), priority(false), money(10000), raw(2), product(2),
     def_facts(QVector<DefFactory>(2)), auto_facts(QVector<AutoFactory>(2)), status("in") {}
@@ -45,7 +46,7 @@ bool Player::checkIfInGame() {
 void Player::payPerRound() {
     money -= 20 * raw + 40 * product;
 }
-bool Player::putRawInFabrics(const int& amount) {
+bool Player::putRawInFabrics(int& amount) {
     int free_space_for_raw = def_facts.size() * 2 + auto_facts.size() * 4;
     for(const auto& fab : def_facts) {
         free_space_for_raw -= fab.getAmount();
@@ -56,25 +57,25 @@ bool Player::putRawInFabrics(const int& amount) {
     if(free_space_for_raw < amount) {
         return false;
     }
+    raw -= amount;
     for(auto& fab : def_facts) {
         for(int i = 0; i < 2; i++)
         {
-            if(free_space_for_raw > 0) {
+            if(amount > 0) {
                 fab.addRaw(1);
-                free_space_for_raw--;
+                amount--;
             }
         }
     }
     for(auto& fab : auto_facts) {
         for(int i = 0; i < 4; i++)
         {
-            if(free_space_for_raw > 0) {
+            if(amount > 0) {
                 fab.addRaw(1);
-                free_space_for_raw--;
+                amount--;
             }
         }
     }
-    raw -= amount;
     return true;
 }
 

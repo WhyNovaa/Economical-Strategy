@@ -48,7 +48,7 @@ public:
 
     void payPerRound();
     void updateProduct(); //достаю все готовое сырье
-    bool putRawInFabrics(const int& amount); //возвращает true - все норм, false - не смогло засунуть сырье на переработку
+    bool putRawInFabrics(int& amount); //возвращает true - все норм, false - не смогло засунуть сырье на переработку
     void setDefaultSettings();
     void makeBet(const int& bet);
     bool checkIfInGame();
