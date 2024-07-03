@@ -115,7 +115,9 @@ void MainWindow::startButtonClicked() {
         players_interface[0]->show();*/ //создадим после ввода паролей
     }
 }
-
+void MainWindow::updateBankPlayers() {
+    b1->setAllPlayers(players);
+}
 void MainWindow:: updatePlayers() {
     for(int i =0; i < players_interface.size(); i ++) {
         players_interface[i]->setPlayer(players[i]);
@@ -284,6 +286,7 @@ void MainWindow::upgradeFactSlot() {
         else {
             players[current_ind].upgradeFacts(amount);
             QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
+            this->updateBankPlayers();
             this->updatePlayers();
         }
         delete rec1;
@@ -305,6 +308,7 @@ void MainWindow::produceSlot() {
         }
         else {
             QMessageBox::information(this, "Переработка сырья", "Операция выполнена успешно");
+            this->updateBankPlayers();
             this->updatePlayers();
         }
         delete rec1;

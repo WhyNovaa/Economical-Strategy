@@ -89,6 +89,7 @@ public:
     ~MainWindow();
 
     void updatePlayers();
+    void updateBankPlayers();
     static int current_ind;
 
     void createStartMenu();
