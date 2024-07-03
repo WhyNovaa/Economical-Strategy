@@ -121,6 +121,7 @@ void MainWindow:: updatePlayers() {
     for(int i =0; i < players_interface.size(); i ++) {
         players_interface[i]->setPlayer(players[i]);
         players_interface[i]->updateData();
+        money_backup[i]=players[i].getMoney()*session_key;
     }
 
 }
@@ -243,7 +244,7 @@ void MainWindow::leftButtonClicked() {
 }
 //-------------------------PlayerInterface-------------------------
 
-PlayerInterface::PlayerInterface(Player& pl, const QMainWindow* w) {
+PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     current_player = pl;
     wid = new QWidget;
     lay = new QGridLayout;
