@@ -101,6 +101,7 @@ bool Player::upgradeFacts(const int& amount) {
             }
             def_facts.erase(def_facts.begin(), def_facts.begin() + temp);
         }
+        money -= amount * 3000;
         return true;
     }
     else

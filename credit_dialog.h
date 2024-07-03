@@ -9,6 +9,8 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QSpinBox>
+
 class credit_dialog : public QDialog{
     Q_OBJECT
 public:

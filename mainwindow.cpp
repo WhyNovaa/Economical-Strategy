@@ -266,8 +266,26 @@ void MainWindow::leftButtonClicked() {
     }
 }
 
-void MainWindow::upgradeFactorySlot() {
-
+void MainWindow::upgradeFactSlot() {
+    fabric_dialog *rec1 = new fabric_dialog(this);
+    rec1->show();
+    if(rec1->exec() == QDialog::Accepted) {
+        int amount = rec1->getAmount();
+        if (amount == 0) {
+            QMessageBox::information(this, "Улучшение фабрик", "Ошибка ввода данных, повторите попытку");
+        } else if(amount > players[current_ind].getDefFacts().size()) {
+            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно фабрик");
+        }
+        else if(amount * 3000 > players[current_ind].getMoney()) {
+            QMessageBox::information(this, "Улучшение фабрик", "Недостаточно средств");
+        }
+        else {
+            players[current_ind].upgradeFacts(amount);
+            QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
+            this->updatePlayers();
+        }
+        delete rec1;
+    }
 }
 //-------------------------PlayerInterface-------------------------
 
