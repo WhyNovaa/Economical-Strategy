@@ -4,7 +4,7 @@
 #include "player.h"
 #include<password_menu.h>
 #include"pass_check.h"
-
+#include "bank.h"
 #include <qDebug>
 #include <QMainWindow>
 #include <QPushButton>
@@ -13,7 +13,8 @@
 #include <QSpinBox>
 #include <QGridLayout>
 #include <QLayout>
-
+#include <QMessageBox>
+#include "credit_dialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -24,7 +25,6 @@ QT_END_NAMESPACE
 class PlayerInterface : public QMainWindow {
     Q_OBJECT
 public:
-
 
     Player current_player;
     QWidget* wid;
@@ -53,7 +53,6 @@ public:
     QLabel* auto_facts;
     // QLabel* raw_bid;
     // QLabel* prod_bid;
-
     void show();
     void close();
     PlayerInterface(const Player& pl, const QMainWindow* w);
@@ -61,7 +60,7 @@ public:
     void setAsMainWindow();
     ~PlayerInterface();
 
-
+    void setPlayer(const Player& g1);
     void setLeftBtnEn(bool b);
     void setRightBtnEn(bool b);
     void updateData();
@@ -85,7 +84,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void update();
+    void updatePlayers();
     static int current_ind;
 
     void createStartMenu();
@@ -97,6 +96,9 @@ private slots:
     void startButtonClicked();
     void leftButtonClicked();
     void rightButtonClicked();
+    void auctionSlot();
+    void creditSlot();
+    void insuranceSlot();
 public slots:
     void slot_pass(QString password);
     void slot_pass_check(int);
@@ -108,9 +110,8 @@ private:
 
     QVector<Player> players;
     QVector<PlayerInterface*> players_interface;
-
     QPushButton* start_button;
-
+    Bank *b1;
     QWidget* start_widget;
     QSpinBox* start_spinBoxButton;
     QGridLayout* start_grid;

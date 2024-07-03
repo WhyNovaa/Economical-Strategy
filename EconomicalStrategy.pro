@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    credit_dialog.cpp \
     main.cpp \
     mainwindow.cpp \
     pass_check.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     sha1.cpp
 
 HEADERS += \
+    credit_dialog.h \
     factory.h \
     mainwindow.h \
     pass_check.h \
