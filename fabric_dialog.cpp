@@ -24,15 +24,17 @@ fabric_dialog::fabric_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint 
 
     QGridLayout* grid = new QGridLayout;
 
-    grid->addWidget(l1, 0, 1, 1, 3);
-    grid->addWidget(spin, 0, 4, 1, 3);
-    grid->addWidget(pcmdOk, 2, 0, 1, 2);
-    grid->addWidget(quit, 2, 4, 1, 2);
+    grid->addWidget(l1, 0, 0);
+    grid->addWidget(spin, 0, 1);
+    grid->addWidget(pcmdOk, 1, 0);
+    grid->addWidget(quit, 1, 1);
 
     setLayout(grid);
 
     this->setWindowTitle("Запрос на получение кредита и погашение кредита");
     this->setModal(true);
+
+    this->setFixedSize(700, 200);
 
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -41,7 +43,6 @@ fabric_dialog::fabric_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint 
     this->setPalette(palette);
 
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
-    this->setFixedSize(700, 200);
 }
 
 int fabric_dialog::getAmount() const {

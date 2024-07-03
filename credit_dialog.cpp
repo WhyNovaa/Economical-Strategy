@@ -16,7 +16,7 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     QPushButton* quit = new QPushButton("&Выйти");
     connect(pcmdOk, SIGNAL(clicked()), SLOT(accept()));
     connect(pcmdCancel, SIGNAL(clicked()), SLOT(reject()));
-    connect(quit, SIGNAL(clicked()), SLOT(quitSlot()));
+    connect(quit, SIGNAL(clicked()), SLOT(close()));
 
     QLabel *l1 = new QLabel("Введите сумму, на которую хотите взять кредит");
     QLabel *l2 = new QLabel("Введите сумму, на которую хотите погасить кредит");
@@ -49,6 +49,8 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     this->setWindowTitle("Запрос на получение кредита и погашение кредита");
     this->setModal(true);
 
+    this->setFixedSize(700, 200);
+
     QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
@@ -56,7 +58,6 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     this->setPalette(palette);
 
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
-    this->setFixedSize(700, 200);
 }
 
 int credit_dialog:: getCredit() const {
