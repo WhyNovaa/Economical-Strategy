@@ -7,6 +7,7 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPushButton>
 class credit_dialog : public QDialog{
     Q_OBJECT

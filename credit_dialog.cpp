@@ -4,32 +4,59 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     QRegularExpression re("[0-9]{6}");
     QRegularExpressionValidator *val1 = new QRegularExpressionValidator;
     val1->setRegularExpression(re);
+
     credit = new QLineEdit;
     low_credit = new QLineEdit;
+
     credit->setValidator(val1);
     low_credit->setValidator(val1);
+
     QPushButton* pcmdOk = new QPushButton("&Взять кредит");
     QPushButton* pcmdCancel = new QPushButton("&Погасить кредит");
-     QPushButton* quit = new QPushButton("&Выйти");
+    QPushButton* quit = new QPushButton("&Выйти");
     connect(pcmdOk, SIGNAL(clicked()), SLOT(accept()));
     connect(pcmdCancel, SIGNAL(clicked()), SLOT(reject()));
     connect(quit, SIGNAL(clicked()), SLOT(close()));
-    QHBoxLayout *h1 = new  QHBoxLayout;
-    QHBoxLayout *h2 = new  QHBoxLayout;
-    QHBoxLayout *h3 = new  QHBoxLayout;
-    QVBoxLayout *v1 =  new  QVBoxLayout;
+
     QLabel *l1 = new QLabel("Введите сумму, на которую хотите взять кредит");
     QLabel *l2 = new QLabel("Введите сумму, на которую хотите погасить кредит");
-     h2->addWidget(credit); h2->addWidget(l1);
-    h3->addWidget(low_credit); h3->addWidget(l2);
-    h1->addWidget(pcmdOk); h1->addWidget(pcmdCancel); h1->addWidget(quit);
-    v1->addLayout(h2); v1->addLayout(h3); v1->addLayout(h1);
-    setLayout(v1);
-    this->resize(400, 100);
-    this->setMinimumSize(400, 100);
-    this->setMaximumSize(400, 100);
+
+    QFont font = l1->font();
+    font.setPointSize(13);
+    font.setBold(true);
+
+    l1->setFont(font);
+    l2->setFont(font);
+    pcmdOk->setFont(font);
+    pcmdCancel->setFont(font);
+    quit->setFont(font);
+    credit->setFont(font);
+    low_credit->setFont(font);
+
+
+    QGridLayout* grid = new QGridLayout;
+
+    grid->addWidget(l1, 0, 3, 1, 3);
+    grid->addWidget(l2, 1, 3, 1, 3);
+    grid->addWidget(credit, 0, 0, 1, 3);
+    grid->addWidget(low_credit, 1, 0, 1, 3);
+    grid->addWidget(pcmdOk, 2, 0, 1, 2);
+    grid->addWidget(pcmdCancel, 2, 2, 1, 2);
+    grid->addWidget(quit, 2, 4, 1, 2);
+
+    setLayout(grid);
+
     this->setWindowTitle("Запрос на получение кредита и погашение кредита");
     this->setModal(true);
+
+    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+    this->setPalette(palette);
+
+    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    this->setFixedSize(700, 200);
 }
 
 int credit_dialog:: getCredit() const {
@@ -38,6 +65,7 @@ int credit_dialog:: getCredit() const {
     }
     return(credit->text().toInt());
 }
+
 int credit_dialog::getLowCredit() const {
     if(low_credit->text().isEmpty() || low_credit->text().toInt() <= 0) {
         return -1;
