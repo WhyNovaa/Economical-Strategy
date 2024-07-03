@@ -74,6 +74,7 @@ void MainWindow::createGameMenu() {
     for(auto& pl : players) {
         players_interface.push_back(new PlayerInterface(pl, this));
     }
+    b1 = new Bank(players);
 }
 
 void MainWindow::clearStartMenu() {
@@ -116,6 +117,16 @@ void MainWindow::startButtonClicked() {
     }
 }
 
+void MainWindow:: updatePlayers() {
+    for(int i =0; i < players_interface.size(); i ++) {
+        players_interface[i]->setPlayer(players[i]);
+        players_interface[i]->updateData();
+    }
+
+}
+void PlayerInterface:: setPlayer(const Player& g1) {
+    current_player = g1;
+}
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -292,15 +303,18 @@ PlayerInterface::PlayerInterface(Player& pl, const QMainWindow* w) {
 
     make_bid = new QPushButton;
     make_bid->setText("Сделать ставку");
+    connect(make_bid, SIGNAL(clicked()), w, SLOT(auctionSlot()));
 
     produce = new QPushButton;
     produce->setText("Произвести");
 
     make_credit = new QPushButton;
     make_credit->setText("Кредит");
+    connect(make_credit, SIGNAL(clicked()), w, SLOT(creditSlot()));
 
     insurance = new QPushButton;
     insurance->setText("Взять страховку");
+    connect(insurance, SIGNAL(clicked()), w, SLOT(insuranceSlot()));
 
     upgr_fact->setFont(font);
     make_bid->setFont(font);
@@ -369,4 +383,86 @@ void PlayerInterface::setLeftBtnEn(bool b) {
 
 void PlayerInterface::setRightBtnEn(bool b) {
     right_but->setEnabled(b);
+}
+
+//<----------------------------------Bank---------------------------------------------->
+void MainWindow:: auctionSlot() {
+
+}
+void MainWindow:: creditSlot() {
+    credit_dialog *rec1 = new credit_dialog(this);
+    rec1->show();
+    if(rec1->exec() == QDialog::Accepted) { //взятие кредита
+        if (rec1->getCredit() == -1) {
+             QMessageBox::information(this, "Взятие кредита", "Ошибка ввода дданых повторите попытку");
+            delete rec1;
+        }
+    else{
+        int b = b1->credit(players[current_ind],rec1->getCredit());
+        if (b == 1) {
+             QMessageBox::information(this, "Взятие кредита", "Вы взяли кредит");
+        }
+        if(b == 0) {
+              QMessageBox::information(this, "Взятие кредита", "Ваш баланс меньше суммы кредита, банк отказывется кредитовать вас");
+        }
+        if(b == -1) {
+              QMessageBox::information(this, "Взятие кредита", "Вы уже взяли кредит, для начала погасите его");
+        }
+        players=b1->getAllPlayers();
+        this->updatePlayers();
+        }
+        delete rec1;
+    }
+    else { //погашение кредита
+        if (rec1->getLowCredit() == -1) {
+            QMessageBox::information(this, "Погашение кредита", "Ошибка ввода дданых повторите попытку");
+            delete rec1;
+        }
+        else{
+            int b2 = b1->payCredit(players[current_ind],rec1->getLowCredit());
+            if (b2 >0) {
+                QMessageBox::information(this, "Погашение кредита", "Вы погасили часть кредита, оставшаяся сумма: " + QString::number(b2));
+            }
+            if(b2 == 0) {
+                QMessageBox::information(this, "Погашение кредита", "Вы погасили кредит!");
+            }
+            if(b2 == -2) {
+                QMessageBox::information(this, "Погашение кредита", "Вы не брали кредит");
+            }
+            if(b2 == -1) {
+                QMessageBox::information(this, "Погашение кредита", "Не хватает средств для погашения кредита");
+            }
+            players=b1->getAllPlayers();
+            this->updatePlayers();
+             delete rec1;
+        }
+    }
+}//взятие кредита, 0, если не смог купить, 1,если смог купить, -1 если уже взял кредит
+
+void MainWindow:: insuranceSlot() {
+    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+
+    this->setPalette(palette);
+    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+
+    this->setFixedSize(400, 200);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Взятие страховки", "Стоимость страховки на следующий ход -- 300. Взятие страховки уберегает вас от негативных эффектов событий. Хотите оформить страховку?", QMessageBox::Yes | QMessageBox::No);
+
+    if(reply == QMessageBox::No) {
+
+    }
+    else {
+        bool b = b1->buyInsurance(players[current_ind], 300); // пока цена страховки триста
+        if (b) {
+            QMessageBox::StandardButton reply = QMessageBox::information(this, "Взятие страховки", "Вы взяли страховку");
+        }
+        else{
+             QMessageBox::StandardButton reply = QMessageBox::information(this, "Взятие страховки", "Недостаточно средств для взятия страховки");
+        }
+    }
+    players=b1->getAllPlayers();
+    this->updatePlayers();
 }
