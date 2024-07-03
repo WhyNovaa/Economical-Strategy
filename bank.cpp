@@ -3,7 +3,15 @@
 void Bank:: setCreditDefaulters(const QVector<cred> defaulterList) {
     credit_defaulters = defaulterList;
 }
-
+bool comp(cred c1, cred c2) {
+    return c1.balance > c2.balance;
+}
+bool id_comp_offers(offer c1, offer c2) {
+    return c1.ID < c2.ID;
+}
+bool id_comp_players(Player p1, Player p2) {
+    return p1.getID()< p2.getID();
+}
 QVector<cred> Bank:: getCreditDefaulters() {
     return credit_defaulters;
 }
@@ -56,7 +64,37 @@ QVector <Player> Bank:: getAllPlayers(){
 //геттеры и сеттеры
 
 
-int Bank::auction(QVector<Player> players, QVector<std::pair<int, int>> offers) {
+void Bank::setCurrentOffers(QVector<offer> p) {
+    cur_offers = p;
+}
+QVector<offer> Bank::getCurrentOffers() {
+    return cur_offers;
+}
+
+int Bank:: add_offer(int raw, int prod, Player pl) {
+    if (pl.getProduct()< cur_prod_count || pl.getMoney()< cur_raw_price) {
+        return -1;
+    }
+    else{
+        if (cur_offers.empty())
+        {
+            offer o(raw, prod, pl.getID());
+            cur_offers.push_back(o);
+            return 1;
+        }
+        for (auto &x: cur_offers) {
+            if (x.ID == pl.getID()){
+                return 0;
+            }
+        }
+        offer o(raw, prod, pl.getID());
+        cur_offers.push_back(o);
+        return 1; // 1 если предложения не было в офферах и 0 если было, -1 если не может сделать предложения из-за
+        //недостаточного кол-ва продукции или денег
+    }
+}
+
+int Bank::auction(QVector<Player> players) {
     QVector<double> coefficents;
     for (auto& i : players) {
         int auto_in_money = 0;
@@ -81,8 +119,10 @@ int Bank::auction(QVector<Player> players, QVector<std::pair<int, int>> offers) 
 
 
     QVector<int> margin;
-    for (size_t i = 0; i < offers.size(); ++i) {
-        margin.push_back((abs(offers[i].first - cur_raw_price)) + abs(offers[i].second - cur_prod_price));  // маржа игрока
+    std::sort(players.begin(), players.end(), id_comp_players);
+    std::sort(cur_offers.begin(), cur_offers.end(), id_comp_offers); // синхронизируем игроков и оферы по айди
+    for (size_t i = 0; i < cur_offers.size(); ++i) {
+        margin.push_back((cur_raw_price - cur_offers[i].raw ) + (cur_offers[i].prod - cur_prod_price));  // маржа игрока
     }
 
     for (int i =0; i < margin.size();i++) {
@@ -97,7 +137,7 @@ int Bank::auction(QVector<Player> players, QVector<std::pair<int, int>> offers) 
             max_ind = i;
         }
     }
-    return max_ind;
+    return players[max_ind].getID();
     // и что должна  возвращать функция?
 }//нужно прописать момент с балансом цен через просмотр баланса цен либо через понижение цены на условно 20%
 
@@ -153,13 +193,13 @@ int Bank:: credit(Player& player, int money) {
         }
     }
     if (player.getMoney() < money) {
-         return 0;
+        return 0;
     }
     else{
         for(auto &x: all) {
             if(x.getID() == player.getID()) {
                 qDebug() << "found";
-                x.setMoney(player.getMoney() - money);
+                x.setMoney(player.getMoney() + money);
             }
         }
         cred p1(player, money);
@@ -207,15 +247,19 @@ int Bank::payCredit(Player& player, int money){
                     return it.balance;
                 }
                 if(it.balance == 0) {
+                    std::sort(credit_defaulters.begin(), credit_defaulters.end(), comp); // запись кредита с нулевым значением будет в конце
+                    credit_defaulters.pop_back();
                     return 0;
                 }
                 if(it.balance < 0) {
                     for(auto &x: all) {
                         if(x.getID() == player.getID()) {
                             qDebug() << "found";
-                            x.setMoney(player.getMoney() - it.balance);
+                            x.setMoney(x.getMoney() - it.balance);
                         }
-                    }
+                    }// вернули избыточные деньги
+                    std::sort(credit_defaulters.begin(), credit_defaulters.end(), comp); // запись кредита с нулевым значением будет в конце
+                    credit_defaulters.pop_back();
                     return 0;
                 }
             }
@@ -223,11 +267,17 @@ int Bank::payCredit(Player& player, int money){
     }
 }
 
-bool Bank:: buyInsurance(Player& player, int money) {
+int Bank:: buyInsurance(Player& player, int money) {
     if (player.getMoney() < money) {
         return 0;
     }
     else{
+        for (auto &x: insured_players) {
+            if(x.getID() == player.getID()) {
+                qDebug() << "found";
+                return -1;
+            }
+        }
         for(auto &x: all) {
             if(x.getID() == player.getID()) {
                 qDebug() << "found";
@@ -237,7 +287,7 @@ bool Bank:: buyInsurance(Player& player, int money) {
             }
         }
     }
-} //покупка страховки, 0, если не смог купить, 1,если смог купить
+} //покупка страховки, 0, если не смог купить, 1,если смог купить, -1 если уже взял
 
 
 void Bank:: resetInsurance(){

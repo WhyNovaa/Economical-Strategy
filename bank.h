@@ -11,6 +11,14 @@ struct cred{
     int duration;
     cred(Player p1, int Money): pl(p1), balance(Money){ duration = 12;}
 };
+struct offer{
+    int raw;
+    int prod;
+    int ID;
+    offer(int r, int p, int id) {
+        raw = r; prod = p; ID = id;
+    }
+};
 
 class Bank {
 private:
@@ -18,6 +26,7 @@ private:
     QVector<cred> credit_defaulters; // Игроки, просрочившие кредит
     QVector<Player> insured_players; // Игроки со страховкой
     QVector<Player> all;
+    QVector<offer> cur_offers;
     int cur_raw_price;
     int cur_prod_price;
     int cur_raw_count;
@@ -29,7 +38,7 @@ public:
 
     void pricing();
 
-    int auction(QVector<Player> players, QVector<std::pair<int, int>> offers);
+    int auction(QVector<Player> players);
 
     void resetInsurance(); // сброс списка застраховавшихся
 
@@ -37,7 +46,7 @@ public:
 
     int credit(Player& player, int money); //выдача кредита
 
-    bool buyInsurance(Player& player, int money); //покупка страховки
+    int buyInsurance(Player& player, int money); //покупка страховки
 
     QVector<Player> checkCredits(); //проверка списка должников
 
@@ -55,6 +64,10 @@ public:
 
     QVector <Player> getAllPlayers();
 
+    void setCurrentOffers(QVector<offer> p);
+    QVector<offer> getCurrentOffers(); //чисто формальные офферы
+
+    int add_offer(int raw, int prod, Player pl);
 
     void setCreditDefaulters(const QVector<cred> defaulterList);
 
@@ -71,3 +84,4 @@ public:
 };
 
 #endif // BANK_H
+

@@ -15,6 +15,7 @@
 #include <QLayout>
 #include <QMessageBox>
 #include "credit_dialog.h"
+#include "bet_dialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
