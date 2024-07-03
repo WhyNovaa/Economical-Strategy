@@ -13,6 +13,7 @@ QRandomGenerator *rg = QRandomGenerator::global();
 int session_key = rg->bounded(100000, 1000000);
 QVector <int> money_backup; //откат денюжек
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -183,12 +184,12 @@ void MainWindow::rightButtonClicked() {
     // PlayerInterface::setLeftBtnEn(false);
     // PlayerInterface::setRightBtnEn(false);
 
-
+    players_interface[current_ind]->hide();
+    update();
     qDebug() << "right";
     check = "right";
     qDebug()<<current_ind;
 
-    players_interface[current_ind]->hide();
     if((current_ind+1 <= players.size()-1 && players[current_ind+1].getStatus()=="in") || (current_ind+1>players.size()-1 && players[0].getStatus()=="in")){
 
         pch = new pass_check(this);
@@ -220,7 +221,7 @@ void MainWindow::rightButtonClicked() {
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
-    updatePlayers();
+    checkGameOver();
 }
 
 void MainWindow::leftButtonClicked() {
@@ -250,7 +251,7 @@ void MainWindow::leftButtonClicked() {
     }
     }
     else{
-        players_interface[current_ind]->close();
+        //players_interface[current_ind]->close();
         current_ind--;
         if(current_ind < 0) {
             current_ind = players.size() - 1;
@@ -269,7 +270,7 @@ void MainWindow::leftButtonClicked() {
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
         }
     }
-    updatePlayers();
+    checkGameOver();
 }
 
 void MainWindow::upgradeFactSlot() {
@@ -469,11 +470,12 @@ void PlayerInterface::close() {
 }
 
 void PlayerInterface::hide(){
-    raw->setText("Сырье: ");
+    raw->setText("Сырье:");
     product->setText("Готового сырья: ");
     def_facts->setText("Обычных фабрик: ");
     auto_facts->setText("Автоматических фабрик: ");
     money->setText("Деньги: ");
+    qDebug()<<"hide";
 }
 
 PlayerInterface::~PlayerInterface() {
