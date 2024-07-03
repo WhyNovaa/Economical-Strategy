@@ -232,7 +232,7 @@ void MainWindow::leftButtonClicked() {
     qDebug() << "left";
     check = "left";
 
-    //players_interface[current_ind]->hide();
+    players_interface[current_ind]->hide();
     if((current_ind-1>=0 && players[current_ind-1].getStatus()=="in") || (current_ind-1<0 && players[players.size()-1].getStatus()=="in")){
 
     pch = new pass_check(this);
