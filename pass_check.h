@@ -22,8 +22,8 @@ private slots:
     void on_pushButton_clicked();
 protected:
     void closeEvent(QCloseEvent* event) override {
-        emit dialogClosed("closed");
         QDialog::closeEvent(event);
+        emit dialogClosed("closed");
     }
 private:
     Ui::pass_check *ui;

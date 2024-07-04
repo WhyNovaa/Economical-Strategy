@@ -262,6 +262,7 @@ void MainWindow::leftButtonClicked() {
     pch = new pass_check(this);
     pch -> show();
     pch->activateWindow();
+    connect(pch, &pass_check::dialogClosed, this, &MainWindow::onDialogClosed);
 
     connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
     connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
@@ -544,6 +545,11 @@ void PlayerInterface::hide(){
 }
 
 void PlayerInterface::hide_out(){
+    money->setText("Деньги: " + QString::number(current_player.getMoney()));
+    raw->setText("Сырье: " + QString::number(current_player.getRaw()));
+    product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
+    def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
+    auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
     right_but->setEnabled(true);
     left_but->setEnabled(true);
     upgr_fact->setEnabled(false);
@@ -557,6 +563,11 @@ void PlayerInterface::hide_out(){
 }
 
 void PlayerInterface::anti_hide(){
+    money->setText("Деньги: " + QString::number(current_player.getMoney()));
+    raw->setText("Сырье: " + QString::number(current_player.getRaw()));
+    product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
+    def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
+    auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
     right_but->setEnabled(true);
     left_but->setEnabled(true);
     upgr_fact->setEnabled(true);
