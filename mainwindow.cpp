@@ -184,7 +184,12 @@ void MainWindow::slot_pass_check(int answ)
     if(flag == 1){
         pch->close();
         players_interface[current_ind]->show();
-        players_interface[current_ind]->anti_hide();
+        if (players[current_ind].getFinishStatus() == true){
+            players_interface[current_ind]->hide_out();
+        }
+        else{
+            players_interface[current_ind]->anti_hide();
+        }
         flag = -1;
     }
 }
@@ -208,12 +213,10 @@ void MainWindow::rightButtonClicked() {
     check = "right";
 
     if((current_ind+1 <= players.size()-1 && players[current_ind+1].getStatus()=="in") || (current_ind+1>players.size()-1 && players[0].getStatus()=="in")){
-
         pch = new pass_check(this);
         pch -> show();
         pch->activateWindow();
         connect(pch, &pass_check::dialogClosed, this, &MainWindow::onDialogClosed);
-        //pch->exec();
 
         connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
         connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
@@ -438,7 +441,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     finish_turn  = new QPushButton;
     finish_turn->setText("Закончить ход");
-    // connect(finish_turn, SIGNAL(clicked()), w, SLOT(*******()));
+    connect(finish_turn, SIGNAL(clicked()), w, SLOT(finishTurnSlot()));
 
     upgr_fact->setFont(font);
     make_bid->setFont(font);
@@ -767,7 +770,12 @@ void MainWindow::giveUpSlot() {
         players_interface[current_ind]->hide_out();
         updatePlayers();
     }
+}
 
+void MainWindow::finishTurnSlot() {
+    players[current_ind].setFinishStatus(true);
+    players_interface[current_ind]->hide_out();
+    updatePlayers();
 }
 
 

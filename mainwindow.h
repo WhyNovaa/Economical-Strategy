@@ -116,6 +116,7 @@ private slots:
     void upgradeFactSlot();
     void produceSlot();
     void giveUpSlot();
+    void finishTurnSlot();
     void createTableSlot();
 
 public slots:

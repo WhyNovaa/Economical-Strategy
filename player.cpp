@@ -2,11 +2,11 @@
 #include <qDebug>
 int Player::next_ID = 1;
 Player::Player() : ID(next_ID++), priority(false), money(10000), raw(2), product(2),
-    def_facts(QVector<DefFactory>(2)), auto_facts(QVector<AutoFactory>(2)), status("in") {}
+    def_facts(QVector<DefFactory>(2)), auto_facts(QVector<AutoFactory>(2)), status("in"), finish_status(false) {}
 Player::Player(const bool& _priority, const int& _money, const int& _raw, const int& _product,
                const QVector<DefFactory>& _def_facts, const QVector<AutoFactory>& _auto_facts, const QString& _status):
     ID(next_ID++), priority(_priority), money(_money), raw(_raw), product(_product), def_facts(_def_facts),
-    auto_facts(_auto_facts), status(_status) {}
+    auto_facts(_auto_facts), status(_status), finish_status(false) {}
 
 void Player::setPriority(const bool& _priority) { priority = _priority; }
 void Player::setMoney(const int& _money) { money = _money; }
