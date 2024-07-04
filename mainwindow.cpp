@@ -316,8 +316,12 @@ void MainWindow::produceSlot() {
         else if(amount > players[current_ind].getRaw()) {
             QMessageBox::information(this, "Переработка сырья", "Недостаточно сырья, повторите попытку");
         }
-        else if(!players[current_ind].putRawInFabrics(amount)) {
+        int res = players[current_ind].putRawInFabrics(amount);
+        if(res == -1) {
             QMessageBox::information(this, "Переработка сырья", "Недостаточно места на фабриках, повторите попытку");
+        }
+        else if(res == -2) {
+            QMessageBox::information(this, "Переработка сырья", "Недостаточно денег, повторите попытку");
         }
         else {
             QMessageBox::information(this, "Переработка сырья", "Операция выполнена успешно");
@@ -501,6 +505,14 @@ PlayerInterface::~PlayerInterface() {
     delete product;
     delete def_facts;
     delete auto_facts;
+    delete make_bid;
+    delete produce;
+    delete upgr_fact;
+    delete make_credit;
+    delete insurance;
+    delete give_up;
+    delete info_butt;
+
 }
 
 void PlayerInterface::setLeftBtnEn(bool b) {
@@ -513,6 +525,7 @@ void PlayerInterface::setRightBtnEn(bool b) {
 
 void MainWindow::createTableSlot(){ // Берет инфу из players; любое его обновление сулит обновление таблицы
      static QTableWidget tableWidget(players.size(), 5);
+     tableWidget.setFixedSize(645, 300);
      tableWidget.setWindowTitle("Таблица с информацией");
 
      QStringList headers;
