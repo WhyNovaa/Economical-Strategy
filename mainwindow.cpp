@@ -347,10 +347,10 @@ void MainWindow::produceSlot() {
 }
 
 void MainWindow::checkNextMonth() {
-    int not_fin = 0;
+    bool not_fin = false;
     for (const auto& i: players){
-        if (i.getFinishStatus() == false) {
-            not_fin++;
+        if (!(i.getStatus() == "out" or i.getFinishStatus() == true)) {
+            not_fin = true;
         }
     }
 
@@ -534,7 +534,6 @@ void PlayerInterface::updateData() {
     def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
     auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
     current_month->setText("Месяц " + QString::number(MainWindow::month));
-
 }
 
 void PlayerInterface::show() {
@@ -786,6 +785,7 @@ void MainWindow::giveUpSlot() {
         players[current_ind].setStatus("out");
         b1->setAllPlayers(players);
         players_interface[current_ind]->hide_out();
+        checkNextMonth();
         updatePlayers();
     }
 }
