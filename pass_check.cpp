@@ -8,6 +8,7 @@ pass_check::pass_check(QWidget *parent)
     , ui(new Ui::pass_check)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Password checking");
     ui->lineEdit->setEchoMode(QLineEdit::Password);
 
 

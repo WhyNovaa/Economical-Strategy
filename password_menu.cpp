@@ -7,6 +7,7 @@ password_menu::password_menu(QWidget *parent)
     , ui(new Ui::password_menu)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Password menu");
     ui->lineEdit->setEchoMode(QLineEdit::Password);
 
 
