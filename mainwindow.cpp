@@ -184,6 +184,7 @@ void MainWindow::slot_pass_check(int answ)
     if(flag == 1){
         pch->close();
         players_interface[current_ind]->show();
+        players_interface[current_ind]->anti_hide();
         flag = -1;
     }
 }
