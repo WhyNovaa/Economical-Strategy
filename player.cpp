@@ -140,7 +140,11 @@ bool Player::upgradeFacts(const int& amount) {
         return false;
     }
 }
-void Player::updateUpgrade() {
+void Player::updateUpgrade() {\
+    for(auto& i : upgrade_facts) {
+        i.second++;
+    }
+
     bool flag = true;
     while(flag) {
         flag = false;
@@ -165,9 +169,6 @@ void Player::updateProduct() {
     }
 }
 void Player::roundUpdate() {
-    for(auto& i : upgrade_facts) {
-        i.second++;
-    }
     payPerRound();
     updateUpgrade();
     updateProduct();
