@@ -15,6 +15,7 @@ void Player::setProduct(const int& _product) { product = _product; }
 void Player::setDefFacts(const QVector<DefFactory>& _def_facts) { def_facts = _def_facts; }
 void Player::setAutoFacts(const QVector<AutoFactory>& _auto_facts) { auto_facts = _auto_facts; }
 void Player::setStatus(const QString& _status) { status = _status; }
+void Player::setFinishStatus(const bool& _finish_status) { finish_status = _finish_status; }
 
 int Player::getID() const { return ID; }
 bool Player::getPriority() const { return priority; }
@@ -24,6 +25,7 @@ int Player::getProduct() const { return product; }
 QVector<DefFactory> Player::getDefFacts() const { return def_facts; }
 QVector<AutoFactory> Player::getAutoFacts() const { return auto_facts; }
 QString Player::getStatus() const { return status; }
+bool Player::getFinishStatus() const { return finish_status; }
 
 
 void Player::setDefaultSettings() {

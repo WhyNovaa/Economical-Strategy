@@ -17,6 +17,7 @@ private:
     QVector<AutoFactory> auto_facts;
     QVector<QPair<int, int>> upgrade_facts;
     QString status;
+    bool finish_status;
     // 20 монет за 1 сырья
     // 40 за готовое сырье
 public:
@@ -33,6 +34,7 @@ public:
     void setDefFacts(const QVector<DefFactory>& _def_facts);
     void setAutoFacts(const QVector<AutoFactory>& _auto_facts);
     void setStatus(const QString& status);
+    void setFinishStatus(const bool& _finish_status);
 
     int getID() const;
     bool getPriority() const;
@@ -42,6 +44,7 @@ public:
     QVector<DefFactory> getDefFacts() const;
     QVector<AutoFactory> getAutoFacts() const;
     QString getStatus() const;
+    bool getFinishStatus() const;
 
     bool upgradeFacts(const int& amount); //возвращает true - все норм, false - не смогло улучшить
     void updateUpgrade();
