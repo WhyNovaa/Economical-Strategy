@@ -764,6 +764,7 @@ void MainWindow::giveUpSlot() {
         players[current_ind].setDefFacts(QVector<DefFactory>(0));
         players[current_ind].setStatus("out");
         b1->setAllPlayers(players);
+        players_interface[current_ind]->hide_out();
         updatePlayers();
     }
 
