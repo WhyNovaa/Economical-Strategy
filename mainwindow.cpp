@@ -233,6 +233,7 @@ void MainWindow::rightButtonClicked() {
             current_ind = 0;
         }
         players_interface[current_ind]->show();
+        players_interface[current_ind]->hide_out();
     }
 
     for(int i=0; i<players.size(); i++){
@@ -278,6 +279,7 @@ void MainWindow::leftButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
+        players_interface[current_ind]->hide_out();
         players_interface[current_ind]->show();
     }
 
@@ -529,6 +531,19 @@ void PlayerInterface::hide(){
     qDebug()<<"hide";
     right_but->setEnabled(false);
     left_but->setEnabled(false);
+    upgr_fact->setEnabled(false);
+    make_bid->setEnabled(false);
+    produce->setEnabled(false);
+    make_credit->setEnabled(false);
+    insurance->setEnabled(false);
+    info_butt->setEnabled(false);
+    give_up->setEnabled(false);
+    finish_turn->setEnabled(false);
+}
+
+void PlayerInterface::hide_out(){
+    right_but->setEnabled(true);
+    left_but->setEnabled(true);
     upgr_fact->setEnabled(false);
     make_bid->setEnabled(false);
     produce->setEnabled(false);

@@ -72,6 +72,7 @@ public:
     void setLeftBtnEn(bool b);
     void setRightBtnEn(bool b);
     void hide();
+    void hide_out();
     void anti_hide();
     void updateData();
 
