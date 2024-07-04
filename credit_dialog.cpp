@@ -58,6 +58,7 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     this->setPalette(palette);
 
     this->setWindowIcon(QIcon(":resources/logo.png"));
+    this->setWindowFlag(Qt::WindowStaysOnTopHint);
 }
 
 int credit_dialog:: getCredit() const {

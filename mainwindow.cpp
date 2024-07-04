@@ -183,8 +183,8 @@ void MainWindow::slot_pass_check(int answ)
     flag = answ;
     if(flag == 1){
         pch->close();
-        players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
+        players_interface[current_ind]->anti_hide();
         flag = -1;
     }
 }
@@ -232,8 +232,9 @@ void MainWindow::rightButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
-        players_interface[current_ind]->anti_hide();
+        //players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
+        players_interface[current_ind]->hide_out();
     }
 
     for(int i=0; i<players.size(); i++){
@@ -279,7 +280,8 @@ void MainWindow::leftButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
-        players_interface[current_ind]->anti_hide();
+       // players_interface[current_ind]->anti_hide();
+        players_interface[current_ind]->hide_out();
         players_interface[current_ind]->show();
     }
 
@@ -541,6 +543,19 @@ void PlayerInterface::hide(){
     finish_turn->setEnabled(false);
 }
 
+void PlayerInterface::hide_out(){
+    right_but->setEnabled(true);
+    left_but->setEnabled(true);
+    upgr_fact->setEnabled(false);
+    make_bid->setEnabled(false);
+    produce->setEnabled(false);
+    make_credit->setEnabled(false);
+    insurance->setEnabled(false);
+    info_butt->setEnabled(false);
+    give_up->setEnabled(false);
+    finish_turn->setEnabled(false);
+}
+
 void PlayerInterface::anti_hide(){
     right_but->setEnabled(true);
     left_but->setEnabled(true);
@@ -598,6 +613,9 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
      }
 
      tableWidget.show();
+     tableWidget.setWindowFlag(Qt::WindowStaysOnTopHint);
+
+     tableWidget.setWindowIcon(QIcon(":resources/logo.png"));
 }
 
 //<----------------------------------Bank---------------------------------------------->
@@ -620,6 +638,10 @@ void MainWindow:: auctionSlot() {
             if(g == 0){
                 QMessageBox::information(this, "Аукцион в банке", "Вы уже сделали предложение");
             }
+            if (g == -2) {
+                QMessageBox::information(this, "Аукцион в банке", "Вы не можете принять участие в аукционе из-за недостаточного кол-ва продукции");
+            }
+
             delete bet;
         }
     }

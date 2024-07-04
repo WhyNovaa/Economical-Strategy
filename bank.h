@@ -38,7 +38,7 @@ public:
 
     void pricing();
 
-    int auction(QVector<Player> players);
+    void auction(QVector<Player> players);
 
     void resetInsurance(); // сброс списка застраховавшихся
 
@@ -84,4 +84,3 @@ public:
 };
 
 #endif // BANK_H
-

@@ -43,6 +43,7 @@ fabric_dialog::fabric_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint 
     this->setPalette(palette);
 
     this->setWindowIcon(QIcon(":resources/logo.png"));
+    this->setWindowFlag(Qt::WindowStaysOnTopHint);
 }
 
 int fabric_dialog::getAmount() const {

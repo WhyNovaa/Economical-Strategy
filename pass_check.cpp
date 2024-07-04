@@ -32,6 +32,7 @@ pass_check::pass_check(QWidget *parent)
     this->setWindowIcon(QIcon(":resources/logo.png"));
 
     this->setFixedSize(400, 200);
+    this->setWindowFlag(Qt::WindowStaysOnTopHint);
 }
 
 pass_check::~pass_check()

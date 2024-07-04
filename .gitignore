@@ -69,4 +69,4 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
-
+debug/
