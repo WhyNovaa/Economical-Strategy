@@ -58,6 +58,7 @@ public:
     QLabel* product;
     QLabel* def_facts;
     QLabel* auto_facts;
+    QLabel* current_month;
     // QLabel* raw_bid;
     // QLabel* prod_bid;
     void show();
@@ -96,6 +97,7 @@ public:
     void updatePlayers();
     void updateBankPlayers();
     static int current_ind;
+    static int month;
 
     void createStartMenu();
     void clearStartMenu();
