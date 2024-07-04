@@ -433,7 +433,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     insurance->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
 
     font = finish_turn->font();
-    font.setPointSize(8);
+    font.setPointSize(14);
     font.setBold(true);
 
     finish_turn->setFont(font);
