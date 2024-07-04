@@ -62,13 +62,13 @@ void MainWindow::createStartMenu() {
     start_widget->setFixedSize(400, 200);
 
 
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
     start_widget->setPalette(palette);
 
-    start_widget->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    start_widget->setWindowIcon(QIcon(":resources/logo.png"));
 
     start_widget->show();
 }
@@ -100,13 +100,13 @@ void MainWindow::startButtonClicked() {
         //сначала пароль
         pm = new password_menu(this);
 
-        QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+        QPixmap bkgnd(":resources/bg.jpg");
         bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
         QPalette palette;
         palette.setBrush(QPalette::Window, bkgnd);
         pm->setPalette(palette);
 
-        pm->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+        pm->setWindowIcon(QIcon(":resources/logo.png"));
 
         pm->show();
 
@@ -337,7 +337,7 @@ void MainWindow::produceSlot() {
     }
 }
 
-int MainWindow::month = 0;
+int MainWindow::month = 1;
 
 
 //-------------------------PlayerInterface-------------------------
@@ -486,13 +486,13 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     wid->setLayout(lay);
 
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
     wid->setPalette(palette);
 
-    wid->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    wid->setWindowIcon(QIcon(":resources/logo.png"));
 
     wid->setWindowState(Qt::WindowFullScreen);
 
@@ -674,13 +674,13 @@ void MainWindow:: creditSlot() {
 }
 
 void MainWindow:: insuranceSlot() {
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
 
     this->setPalette(palette);
-    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    this->setWindowIcon(QIcon(":resources/logo.png"));
 
     this->setFixedSize(400, 200);
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Взятие страховки", "Стоимость страховки на следующий ход -- 300. Взятие страховки уберегает вас от негативных эффектов событий. Хотите оформить страховку?", QMessageBox::Yes | QMessageBox::No);

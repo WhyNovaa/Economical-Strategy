@@ -21,13 +21,13 @@ password_menu::password_menu(QWidget *parent)
 
 
 
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
 
     this->setPalette(palette);
-    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    this->setWindowIcon(QIcon(":resources/logo.png"));
 
     this->setFixedSize(400, 200);
 }

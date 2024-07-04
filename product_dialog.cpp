@@ -36,13 +36,13 @@ product_dialog::product_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHin
 
     this->setFixedSize(700, 200);
 
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
     this->setPalette(palette);
 
-    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    this->setWindowIcon(QIcon(":resources/logo.png"));
 }
 
 int product_dialog::getAmount() const {

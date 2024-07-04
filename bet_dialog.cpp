@@ -175,13 +175,13 @@ bet_dialog:: bet_dialog(int cur_raw_count, int cur_prod_count, int cur_raw_price
     prod_price->setAlignment(Qt::AlignCenter);
 
 
-    QPixmap bkgnd("/Economical-Strategy/resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
     this->setPalette(palette);
 
-    this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
+    this->setWindowIcon(QIcon(":resources/logo.png"));
 }
 
 int bet_dialog:: getRawPrice() const {
