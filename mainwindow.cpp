@@ -417,6 +417,10 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     info_butt->setText("Информация");
     connect(info_butt, SIGNAL(clicked()), w, SLOT(createTableSlot()));
 
+    finish_turn  = new QPushButton;
+    finish_turn->setText("Закончить ход");
+    // connect(finish_turn, SIGNAL(clicked()), w, SLOT(*******()));
+
     upgr_fact->setFont(font);
     make_bid->setFont(font);
     produce->setFont(font);
@@ -428,27 +432,41 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     make_credit->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     insurance->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
 
+    font = finish_turn->font();
+    font.setPointSize(8);
+    font.setBold(true);
+
+    finish_turn->setFont(font);
+    give_up->setFont(font);
+    left_but->setFont(font);
+    right_but->setFont(font);
+    info_butt->setFont(font);
+
     give_up->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
+    finish_turn->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
 
+    lay->addWidget(name, 0, 0, 1, 4);
+    lay->addWidget(money, 1, 0, 1, 2);
+    lay->addWidget(make_bid, 1, 2, 1, 2);
 
-    lay->addWidget(give_up, 0, 0, 1, 2);
-    lay->addWidget(name, 1, 0, 1, 2);
-    lay->addWidget(money, 2, 0);
-    lay->addWidget(raw, 3, 0);
-    lay->addWidget(product, 4, 0);
-    lay->addWidget(def_facts, 5, 0);
-    lay->addWidget(auto_facts, 6, 0);
+    lay->addWidget(raw, 2, 0, 1, 2);
+    lay->addWidget(make_credit, 2, 2, 1, 2);
 
-    lay->addWidget(make_bid, 2, 1);
-    lay->addWidget(make_credit, 3, 1);
-    lay->addWidget(insurance, 4, 1);
-    lay->addWidget(produce, 5, 1);
-    lay->addWidget(upgr_fact, 6, 1);
+    lay->addWidget(product, 3, 0, 1, 2);
+    lay->addWidget(insurance, 3, 2, 1, 2);
 
-    lay->addWidget(left_but, 7, 0);
-    lay->addWidget(right_but, 7, 1);
+    lay->addWidget(def_facts, 4, 0, 1, 2);
+    lay->addWidget(produce, 4, 2, 1, 2);
 
-    lay->addWidget(info_butt, 8, 0, 1, 2);
+    lay->addWidget(auto_facts, 5, 0, 1, 2);
+    lay->addWidget(upgr_fact, 5, 2, 1, 2);
+
+    lay->addWidget(info_butt, 6, 0, 1, 4);
+
+    lay->addWidget(left_but, 7, 0, 1, 1);
+    lay->addWidget(finish_turn, 7, 1, 1, 1);
+    lay->addWidget(give_up, 7, 2, 1, 1);
+    lay->addWidget(right_but, 7, 3, 1, 1);
 
     wid->setLayout(lay);
 
