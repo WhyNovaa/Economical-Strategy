@@ -22,7 +22,7 @@ pass_check::pass_check(QWidget *parent)
 
 
 
-    QPixmap bkgnd("/:resources/bg.jpg");
+    QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
