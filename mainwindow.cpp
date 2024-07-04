@@ -188,6 +188,13 @@ void MainWindow::slot_pass_check(int answ)
     }
 }
 
+void MainWindow::onDialogClosed(QString word)
+{
+    if(word == "closed"){
+        players_interface[current_ind]->anti_hide();
+    }
+}
+
 void MainWindow::rightButtonClicked() {
     //здесь реализация перехода к другому интерфейсу вправо
 
@@ -198,13 +205,14 @@ void MainWindow::rightButtonClicked() {
     players_interface[current_ind]->hide();
     qDebug() << "right";
     check = "right";
-    qDebug()<<current_ind;
 
     if((current_ind+1 <= players.size()-1 && players[current_ind+1].getStatus()=="in") || (current_ind+1>players.size()-1 && players[0].getStatus()=="in")){
 
         pch = new pass_check(this);
         pch -> show();
         pch->activateWindow();
+        connect(pch, &pass_check::dialogClosed, this, &MainWindow::onDialogClosed);
+        //pch->exec();
 
         connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
         connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
@@ -492,6 +500,27 @@ void PlayerInterface::hide(){
     auto_facts->setText("Автоматических фабрик: ");
     money->setText("Деньги: ");
     qDebug()<<"hide";
+    right_but->setEnabled(false);
+    left_but->setEnabled(false);
+    upgr_fact->setEnabled(false);
+    make_bid->setEnabled(false);
+    produce->setEnabled(false);
+    make_credit->setEnabled(false);
+    insurance->setEnabled(false);
+    info_butt->setEnabled(false);
+    give_up->setEnabled(false);
+}
+
+void PlayerInterface::anti_hide(){
+    right_but->setEnabled(true);
+    left_but->setEnabled(true);
+    upgr_fact->setEnabled(true);
+    make_bid->setEnabled(true);
+    produce->setEnabled(true);
+    make_credit->setEnabled(true);
+    insurance->setEnabled(true);
+    info_butt->setEnabled(true);
+    give_up->setEnabled(true);
 }
 
 PlayerInterface::~PlayerInterface() {

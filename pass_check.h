@@ -16,11 +16,16 @@ public:
     ~pass_check();
 signals:
     void signal_pass_check(int);
+    void dialogClosed(QString);
 public slots:
     void slot_index(QString true_pass, int i);
 private slots:
     void on_pushButton_clicked();
-
+protected:
+    void closeEvent(QCloseEvent* event) override {
+        emit dialogClosed("closed");
+        QDialog::closeEvent(event);
+    }
 private:
     Ui::pass_check *ui;
 };

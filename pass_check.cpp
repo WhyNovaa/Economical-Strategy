@@ -1,6 +1,7 @@
 #include "pass_check.h"
 #include "ui_pass_check.h"
 #include"sha1.h"
+#include"mainwindow.h"
 
 pass_check::pass_check(QWidget *parent)
     : QDialog(parent)
@@ -52,10 +53,10 @@ void pass_check::on_pushButton_clicked()
         emit signal_pass_check(1);
     }else{
         if( pass=="" || (QString::fromStdString(sha1(pass.toStdString())))!=True_pass){
-            qDebug()<< "here";
+            //qDebug()<< "here";
             ui->label->setText("Wrong password try again");
             ui->lineEdit->clear();
-            //emit signal_pass_check(0);
+            //emit signal_pass_check(2);
         }
     }
 }

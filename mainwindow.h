@@ -70,6 +70,7 @@ public:
     void setLeftBtnEn(bool b);
     void setRightBtnEn(bool b);
     void hide();
+    void anti_hide();
     void updateData();
 
     // static void setLeftBtnEn(bool b);
@@ -115,7 +116,8 @@ private slots:
 
 public slots:
     void slot_pass(QString password);
-    void slot_pass_check(int);
+    void slot_pass_check(int answ);
+    void onDialogClosed(QString word);
 signals:
     void signal_pass(int);
     void signal_index(QString, int);
