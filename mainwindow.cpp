@@ -641,7 +641,8 @@ void MainWindow:: auctionSlot() {
             if (g == -2) {
                 QMessageBox::information(this, "Аукцион в банке", "Вы не можете принять участие в аукционе из-за недостаточного кол-ва продукции");
             }
-
+            players=b1->getAllPlayers();
+            this->updatePlayers();
             delete bet;
         }
     }
