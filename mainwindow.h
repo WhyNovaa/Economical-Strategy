@@ -106,6 +106,8 @@ public:
     void createGameMenu();
     void checkGameOver();
 
+    void checkNextMonth();
+
 private slots:
     void startButtonClicked();
     void leftButtonClicked();
