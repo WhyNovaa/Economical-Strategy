@@ -535,6 +535,7 @@ void PlayerInterface::hide(){
     insurance->setEnabled(false);
     info_butt->setEnabled(false);
     give_up->setEnabled(false);
+    finish_turn->setEnabled(false);
 }
 
 void PlayerInterface::anti_hide(){
@@ -547,6 +548,7 @@ void PlayerInterface::anti_hide(){
     insurance->setEnabled(true);
     info_butt->setEnabled(true);
     give_up->setEnabled(true);
+    finish_turn->setEnabled(true);
 }
 
 PlayerInterface::~PlayerInterface() {
