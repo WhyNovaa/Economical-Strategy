@@ -10,7 +10,7 @@ int MainWindow::current_ind = 0;
 
 QVector <QString> passwords; // тут будут храниться пароли игроков
 QRandomGenerator *rg = QRandomGenerator::global();
-int session_key = rg->bounded(100000, 1000000);
+int session_key = rg->bounded(100, 1000);
 QVector <int> money_backup;    //откат денюжек
 QVector <int> raw_backup;
 QVector <int> product_backup;
@@ -261,7 +261,7 @@ void MainWindow::leftButtonClicked() {
     }
     }
     else{
-        //players_interface[current_ind]->close();
+        players_interface[current_ind]->close();
         current_ind--;
         if(current_ind < 0) {
             current_ind = players.size() - 1;
@@ -269,10 +269,7 @@ void MainWindow::leftButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
-        if(flag == 1){
-            pch->close();
-            players_interface[current_ind]->show();
-        }
+        players_interface[current_ind]->show();
     }
 
     for(int i=0; i<players.size(); i++){
