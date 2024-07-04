@@ -44,6 +44,7 @@ public:
     QPushButton* upgr_fact;
     QPushButton* make_credit;
     QPushButton* insurance;
+    QPushButton* finish_turn;
     QPushButton* give_up;
     QPushButton* info_butt;
 
