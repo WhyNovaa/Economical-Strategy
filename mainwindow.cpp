@@ -183,6 +183,7 @@ void MainWindow::slot_pass_check(int answ)
     flag = answ;
     if(flag == 1){
         pch->close();
+        players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
         flag = -1;
     }
@@ -231,6 +232,7 @@ void MainWindow::rightButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
+        players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
     }
 
@@ -277,6 +279,7 @@ void MainWindow::leftButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
+        players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
     }
 
