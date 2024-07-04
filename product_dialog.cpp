@@ -46,6 +46,5 @@ product_dialog::product_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHin
 }
 
 int product_dialog::getAmount() const {
-    qDebug() << spin->value();
     return spin->value();
 }
