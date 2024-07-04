@@ -59,19 +59,19 @@ int Player::putRawInFabrics(int amount) {
     }
     int raw_money = 0;
     int amount_copy = amount;
-    for(auto& fab : def_facts) {
-        for(int i = 0; i < 2; i++)
+    for(auto& fab : auto_facts) {
+        for(int i = 0; i < 4; i++)
         {
-            if(amount_copy > 0 && fab.getAmount() < 2) {
+            if(amount_copy > 0 && fab.getAmount() < 4) {
                 raw_money += fab.getCost();
                 amount_copy--;
             }
         }
     }
-    for(auto& fab : auto_facts) {
-        for(int i = 0; i < 4; i++)
+    for(auto& fab : def_facts) {
+        for(int i = 0; i < 2; i++)
         {
-            if(amount_copy > 0 && fab.getAmount() < 4) {
+            if(amount_copy > 0 && fab.getAmount() < 2) {
                 raw_money += fab.getCost();
                 amount_copy--;
             }
@@ -83,19 +83,19 @@ int Player::putRawInFabrics(int amount) {
 
     raw -= amount;
     money -= raw_money;
-    for(auto& fab : def_facts) {
-        for(int i = 0; i < 2; i++)
+    for(auto& fab : auto_facts) {
+        for(int i = 0; i < 4; i++)
         {
-            if(amount > 0 && fab.getAmount() < 2) {
+            if(amount > 0 && fab.getAmount() < 4) {
                 fab.addRaw(1);
                 amount--;
             }
         }
     }
-    for(auto& fab : auto_facts) {
-        for(int i = 0; i < 4; i++)
+    for(auto& fab : def_facts) {
+        for(int i = 0; i < 2; i++)
         {
-            if(amount > 0 && fab.getAmount() < 4) {
+            if(amount > 0 && fab.getAmount() < 2) {
                 fab.addRaw(1);
                 amount--;
             }
