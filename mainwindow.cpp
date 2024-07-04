@@ -337,7 +337,7 @@ void MainWindow::produceSlot() {
     }
 }
 
-
+int MainWindow::month = 0;
 
 
 //-------------------------PlayerInterface-------------------------
@@ -356,9 +356,11 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     product = new QLabel;
     def_facts = new QLabel;
     auto_facts = new QLabel;
+    current_month = new QLabel;
 
     left_but->setText("<-");
     right_but->setText("->");
+    current_month->setText("Месяц: " + QString::number(MainWindow::month));
 
     connect(left_but, SIGNAL( clicked() ), w, SLOT( leftButtonClicked() ));
     connect(right_but, SIGNAL( clicked() ), w, SLOT( rightButtonClicked() ));
@@ -389,6 +391,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     product->setAlignment(Qt::AlignCenter);
     def_facts->setAlignment(Qt::AlignCenter);
     auto_facts->setAlignment(Qt::AlignCenter);
+    current_month->setAlignment(Qt::AlignCenter);
 
 
     money->setFont(font);
@@ -396,6 +399,8 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     product->setFont(font);
     def_facts->setFont(font);
     auto_facts->setFont(font);
+
+    current_month->setFont(font);
 
     upgr_fact = new QPushButton;
     upgr_fact->setText("Улучшить фабрику");
@@ -453,7 +458,9 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     give_up->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
     finish_turn->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
 
-    lay->addWidget(name, 0, 0, 1, 4);
+    lay->addWidget(name, 0, 0, 1, 3);
+    lay->addWidget(current_month, 0, 3, 1, 1);
+
     lay->addWidget(money, 1, 0, 1, 2);
     lay->addWidget(make_bid, 1, 2, 1, 2);
 
@@ -475,6 +482,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     lay->addWidget(finish_turn, 7, 1, 1, 1);
     lay->addWidget(give_up, 7, 2, 1, 1);
     lay->addWidget(right_but, 7, 3, 1, 1);
+
 
     wid->setLayout(lay);
 
