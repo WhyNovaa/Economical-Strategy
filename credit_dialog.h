@@ -19,7 +19,7 @@ public:
     int getLowCredit() const;
 
 private slots:
-    void quitSlot();
+    void quit();
 
 private:
     QLineEdit *credit;

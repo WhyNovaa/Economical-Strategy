@@ -72,7 +72,7 @@ QVector<offer> Bank::getCurrentOffers() {
 }
 
 int Bank:: add_offer(int raw, int prod, Player pl) {
-    if (pl.getProduct()< cur_prod_count || pl.getMoney()< cur_raw_price) {
+    if (pl.getProduct()< cur_prod_count || pl.getMoney()< raw) {
         return -1;
     }
     else{
