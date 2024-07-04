@@ -45,6 +45,9 @@ bool Player::checkIfInGame() {
 // 40 за готовое сырье
 void Player::payPerRound() {
     money -= 20 * raw + 40 * product;
+    if(money < 0) {
+        status = "out";
+    }
 }
 int Player::putRawInFabrics(int amount) {
     int free_space_for_raw = def_facts.size() * 2 + auto_facts.size() * 4;

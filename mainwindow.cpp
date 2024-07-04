@@ -497,8 +497,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     wid->setWindowIcon(QIcon(":resources/logo.png"));
 
-    wid->setWindowState(Qt::WindowMaximized);
-    wid->setMinimumWidth(1000);
+    wid->setWindowState(Qt::WindowFullScreen);
 
 }
 
@@ -612,6 +611,9 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
      }
 
      tableWidget.show();
+     tableWidget.setWindowFlag(Qt::WindowStaysOnTopHint);
+
+     tableWidget.setWindowIcon(QIcon(":resources/logo.png"));
 }
 
 //<----------------------------------Bank---------------------------------------------->

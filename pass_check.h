@@ -2,7 +2,6 @@
 #define PASS_CHECK_H
 
 #include <QDialog>
-
 namespace Ui {
 class pass_check;
 }

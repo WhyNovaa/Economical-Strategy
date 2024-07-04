@@ -182,6 +182,7 @@ bet_dialog:: bet_dialog(int cur_raw_count, int cur_prod_count, int cur_raw_price
     this->setPalette(palette);
 
     this->setWindowIcon(QIcon(":resources/logo.png"));
+    this->setWindowFlag(Qt::WindowStaysOnTopHint);
 }
 
 int bet_dialog:: getRawPrice() const {
