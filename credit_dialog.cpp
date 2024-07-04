@@ -16,7 +16,7 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
     QPushButton* quit = new QPushButton("&Выйти");
     connect(pcmdOk, SIGNAL(clicked()), SLOT(accept()));
     connect(pcmdCancel, SIGNAL(clicked()), SLOT(reject()));
-    connect(quit, SIGNAL(clicked()), SLOT(close()));
+    connect(quit, SIGNAL(clicked()), SLOT(quit()));
 
     QLabel *l1 = new QLabel("Введите сумму, на которую хотите взять кредит");
     QLabel *l2 = new QLabel("Введите сумму, на которую хотите погасить кредит");
@@ -61,20 +61,20 @@ credit_dialog:: credit_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint
 }
 
 int credit_dialog:: getCredit() const {
-    if(credit->text().isEmpty() || credit->text().toInt() <= 0) {
+    if(credit->text().isEmpty() || credit->text().toInt() == 0) {
         return -1;
     }
     return(credit->text().toInt());
 }
 
 int credit_dialog::getLowCredit() const {
-    if(low_credit->text().isEmpty() || low_credit->text().toInt() <= 0) {
+    if(low_credit->text().isEmpty() || low_credit->text().toInt() == 0) {
         return -1;
     }
     return(low_credit->text().toInt());
 }
 
-void credit_dialog::quitSlot(){
+void credit_dialog::quit(){
     low_credit->setText("-4");
     this->close();
 }

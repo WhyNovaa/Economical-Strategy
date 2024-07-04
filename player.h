@@ -43,12 +43,12 @@ public:
     QVector<AutoFactory> getAutoFacts() const;
     QString getStatus() const;
 
-    bool upgradeFacts(const int& amount); //возвращает true - все норм, false - не смогло улучшить (сюда можно закинуть только кратное 2 количество)
+    bool upgradeFacts(const int& amount); //возвращает true - все норм, false - не смогло улучшить
     void updateUpgrade();
 
     void payPerRound();
     void updateProduct(); //достаю все готовое сырье
-    bool putRawInFabrics(int& amount); //возвращает true - все норм, false - не смогло засунуть сырье на переработку
+    int putRawInFabrics(int amount); //возвращает 1 - все норм, -1 - недостаточно места, -2 - недостаточно денег
     void setDefaultSettings();
     void makeBet(const int& bet);
     bool checkIfInGame();

@@ -46,7 +46,7 @@ bool Player::checkIfInGame() {
 void Player::payPerRound() {
     money -= 20 * raw + 40 * product;
 }
-bool Player::putRawInFabrics(int& amount) {
+int Player::putRawInFabrics(int amount) {
     int free_space_for_raw = def_facts.size() * 2 + auto_facts.size() * 4;
     for(const auto& fab : def_facts) {
         free_space_for_raw -= fab.getAmount();
@@ -55,28 +55,53 @@ bool Player::putRawInFabrics(int& amount) {
         free_space_for_raw -= fab.getAmount();
     }
     if(free_space_for_raw < amount) {
-        return false;
+        return -1;
     }
-    raw -= amount;
-    for(auto& fab : def_facts) {
-        for(int i = 0; i < 2; i++)
-        {
-            if(amount > 0) {
-                fab.addRaw(1);
-                amount--;
-            }
-        }
-    }
+    int raw_money = 0;
+    int amount_copy = amount;
     for(auto& fab : auto_facts) {
         for(int i = 0; i < 4; i++)
         {
-            if(amount > 0) {
+            if(amount_copy > 0 && fab.getAmount() < 4) {
+                raw_money += fab.getCost();
+                amount_copy--;
+            }
+        }
+    }
+    for(auto& fab : def_facts) {
+        for(int i = 0; i < 2; i++)
+        {
+            if(amount_copy > 0 && fab.getAmount() < 2) {
+                raw_money += fab.getCost();
+                amount_copy--;
+            }
+        }
+    }
+    if(money < raw_money) {
+        return -2;
+    }
+
+    raw -= amount;
+    money -= raw_money;
+    for(auto& fab : auto_facts) {
+        for(int i = 0; i < 4; i++)
+        {
+            if(amount > 0 && fab.getAmount() < 4) {
                 fab.addRaw(1);
                 amount--;
             }
         }
     }
-    return true;
+    for(auto& fab : def_facts) {
+        for(int i = 0; i < 2; i++)
+        {
+            if(amount > 0 && fab.getAmount() < 2) {
+                fab.addRaw(1);
+                amount--;
+            }
+        }
+    }
+    return 1;
 }
 
 bool Player::upgradeFacts(const int& amount) {
@@ -101,6 +126,7 @@ bool Player::upgradeFacts(const int& amount) {
                 if(counter < amount) {
                     counter++;
                     raw += fab.getAmount();
+                    money += fab.getAmount() * fab.getCost();
                     fab.setAmount(0);
                 }
             }
@@ -114,7 +140,11 @@ bool Player::upgradeFacts(const int& amount) {
         return false;
     }
 }
-void Player::updateUpgrade() {
+void Player::updateUpgrade() {\
+    for(auto& i : upgrade_facts) {
+        i.second++;
+    }
+
     bool flag = true;
     while(flag) {
         flag = false;
@@ -139,11 +169,7 @@ void Player::updateProduct() {
     }
 }
 void Player::roundUpdate() {
-    for(auto& i : upgrade_facts) {
-        i.second++;
-    }
     payPerRound();
     updateUpgrade();
     updateProduct();
 }
-//sad
