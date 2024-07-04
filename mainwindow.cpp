@@ -412,6 +412,10 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     give_up->setText("Сдаться");
     connect(give_up, SIGNAL(clicked()), w, SLOT(giveUpSlot()));
 
+    info_butt  = new QPushButton;
+    info_butt->setText("Информация");
+    connect(info_butt, SIGNAL(clicked()), w, SLOT(createTableSlot()));
+
     upgr_fact->setFont(font);
     make_bid->setFont(font);
     produce->setFont(font);
@@ -422,7 +426,6 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
     produce->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     make_credit->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     insurance->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
-
 
     give_up->setStyleSheet("QPushButton{border: 2px solid #cfa055; border-radius:10px;padding : 0 8px; background-color: #d2a970; } QPushButton:hover {border: 2px solid #f44336; background-color: #f44336;} QPushButton:pressed { border: 2px solid #760d05; background-color: #9a0b00}");
 
@@ -443,6 +446,8 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     lay->addWidget(left_but, 7, 0);
     lay->addWidget(right_but, 7, 1);
+
+    lay->addWidget(info_butt, 8, 0, 1, 2);
 
     wid->setLayout(lay);
 
@@ -506,7 +511,24 @@ void PlayerInterface::setRightBtnEn(bool b) {
     right_but->setEnabled(b);
 }
 
+void MainWindow::createTableSlot(){ // Берет инфу из players; любое его обновление сулит обновление таблицы
+     static QTableWidget tableWidget(players.size(), 5);
+     tableWidget.setWindowTitle("Таблица с информацией");
 
+     QStringList headers;
+     headers << "Деньги" << "Сырье" << "Продукт" << "ОФ" << "АФ";
+     tableWidget.setHorizontalHeaderLabels(headers);
+
+     for (const auto &it: players){
+         tableWidget.setItem(it.getID()-1, 0, new QTableWidgetItem(QString::number(it.getMoney())));
+         tableWidget.setItem(it.getID()-1, 1,new QTableWidgetItem(QString::number(it.getRaw())));
+         tableWidget.setItem(it.getID()-1, 2, new QTableWidgetItem(QString::number(it.getProduct())));
+         tableWidget.setItem(it.getID()-1, 3, new QTableWidgetItem(QString::number(it.getDefFacts().size())));
+         tableWidget.setItem(it.getID()-1, 4, new QTableWidgetItem(QString::number(it.getAutoFacts().size())));
+     }
+
+     tableWidget.show();
+}
 
 //<----------------------------------Bank---------------------------------------------->
 void MainWindow:: auctionSlot() {

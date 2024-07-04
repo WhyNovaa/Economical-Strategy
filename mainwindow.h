@@ -14,10 +14,12 @@
 #include <QGridLayout>
 #include <QLayout>
 #include <QMessageBox>
+#include <QTableWidget>
 #include "credit_dialog.h"
 #include "bet_dialog.h"
 #include "fabric_dialog.h"
 #include "product_dialog.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -43,6 +45,7 @@ public:
     QPushButton* make_credit;
     QPushButton* insurance;
     QPushButton* give_up;
+    QPushButton* info_butt;
 
 
     // static QPushButton* left_but;
@@ -108,6 +111,8 @@ private slots:
     void upgradeFactSlot();
     void produceSlot();
     void giveUpSlot();
+    void createTableSlot();
+
 public slots:
     void slot_pass(QString password);
     void slot_pass_check(int);
