@@ -497,7 +497,8 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     wid->setWindowIcon(QIcon(":resources/logo.png"));
 
-    wid->setWindowState(Qt::WindowFullScreen);
+    wid->setWindowState(Qt::WindowMaximized);
+    wid->setMinimumWidth(1000);
 
 }
 
