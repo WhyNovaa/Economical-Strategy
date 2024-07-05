@@ -687,7 +687,35 @@ void PlayerInterface::setRightBtnEn(bool b) {
 }
 
 void MainWindow::createTableSlot(){ // Берет инфу из players; любое его обновление сулит обновление таблицы
-     static QTableWidget tableWidget(players.size(), 5);
+
+    for(int i=0; i<players.size(); i++){
+        if((money_backup[i]!=players[i].getMoney()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=players[i].getProduct()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+
+
+    static QTableWidget tableWidget(players.size(), 5);
      tableWidget.setFixedSize(645, 300);
      tableWidget.setWindowTitle("Таблица с информацией");
 
