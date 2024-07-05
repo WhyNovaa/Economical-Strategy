@@ -443,36 +443,25 @@ int Bank::randomEvent() {
     }
 
     case 2: {
-        int random_for_fabric = 0;
-        while(true){
-            random_for_fabric = rand() % all.size() + 1;
-            if (all[random_for_fabric].getStatus() != "out"){
-                break;
-            }
-        }
+        int random_for_fabric = rand() % all.size() + 1;
         for (auto& i : all) {
-            if (i.getStatus() != "out"){
-                bool has_an_insurance = 0;
+            bool has_an_insurance = 0;
 
-                for (auto& k : insured_players) {
+            for (auto& k : insured_players) {
 
-                    if (i.getID() == k.getID()) {
-                        has_an_insurance = 1;
-                    }
+                if (i.getID() == k.getID()) {
+                    has_an_insurance = 1;
                 }
+            }
 
-                if (i.getID() == random_for_fabric && !has_an_insurance) {
+            if (i.getID() == random_for_fabric && !has_an_insurance) {
 
-                    if (i.getStatus() != "out") {
-                        if (!i.getAutoFacts().empty() || !i.getDefFacts().empty()) {
-                            i.deleteFabrics(rand() % (i.getAutoFacts().size() + i.getDefFacts().size()));
-                        }
-                        else {
-                            i.setMoney(i.getMoney() - 500);
-                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
-                                i.setStatus("out");
-                            }
-                        }
+                if (i.getStatus() != "out") {
+                    if (!i.getAutoFacts().empty() || !i.getDefFacts().empty()) {
+                        i.deleteFabrics(rand() % (i.getAutoFacts().size() + i.getDefFacts().size()));
+                    }
+                    else {
+                        i.setMoney(i.getMoney() - 500);
                     }
                 }
             }
@@ -481,60 +470,34 @@ int Bank::randomEvent() {
     }
 
     case 3: {
-        int real_all_size = 0;
-        for (auto& i: all){
-            if (i.getStatus() != "out"){
-                ++real_all_size;
-            }
-        }
-        int random_for_birthday = 0;
-        while(true){
-            random_for_birthday = rand() % all.size() + 1;
-            if (all[random_for_birthday].getStatus() != "out"){
-                break;
-            }
-        }
-
+        int random_for_birthday = rand() % all.size() + 1;
         for (auto& i : all) {
-            if (i.getStatus() != "out"){
+            bool has_an_insurance = 0;
 
-                bool has_an_insurance = 0;
+            for (auto& k : insured_players) {
 
-                for (auto& k : insured_players) {
-
-                    if (i.getID() == k.getID()) {
-                        has_an_insurance = 1;
-                    }
+                if (i.getID() == k.getID()) {
+                    has_an_insurance = 1;
                 }
-                if (i.getStatus() != "out") {
+            }
+            if (i.getStatus() != "out") {
 
-                    if (i.getID() == random_for_birthday) {
-                        i.setMoney(i.getMoney() + 100 * (real_all_size - 1));    // прибавляются 100 баксов от каждого игрока
+                if (i.getID() == random_for_birthday) {
+                    i.setMoney(i.getMoney() + 100 * (all.size() - 1));    // прибавляются 100 баксов от каждого игрока
 
-                        if (has_an_insurance) {
-                            i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
-                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
-                                i.setStatus("out");
-                            }
-                        }
-
-                        else {
-                            i.setMoney(i.getMoney() - 100 * insured_players.size());
-                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
-                                i.setStatus("out");
-                            }
-                        }
+                    if (has_an_insurance) {
+                        i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
                     }
+
                     else {
-                        if (!has_an_insurance) {
-                            i.setMoney(i.getMoney() - 100);
-                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
-                                i.setStatus("out");
-                            }
-                        }
+                        i.setMoney(i.getMoney() - 100 * insured_players.size());
                     }
                 }
-
+                else {
+                    if (!has_an_insurance) {
+                        i.setMoney(i.getMoney() - 100);
+                    }
+                }
             }
         }
         return 3;
