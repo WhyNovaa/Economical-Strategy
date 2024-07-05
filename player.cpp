@@ -197,7 +197,10 @@ void Player::roundUpdate() {
     updateProduct();
 }
 
-void Player::deleteFabrics(const int& amount) {
+bool Player::deleteFabrics(const int& amount) {
+    if(def_facts.size() + auto_facts.size() < amount) {
+        return false;
+    }
     srand(time(NULL));
     QVector<Factory*> all;
     for(auto& i : def_facts) {
@@ -221,4 +224,5 @@ void Player::deleteFabrics(const int& amount) {
     }
     setDefFacts(new_def);
     setAutoFacts(new_auto);
+    return true;
 }
