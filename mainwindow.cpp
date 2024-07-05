@@ -51,6 +51,8 @@ void MainWindow::createStartMenu() {
     start_label->setFont(font);
 
     start_spinBoxButton->setFont(font);
+    start_spinBoxButton->setMinimum(2);
+    start_spinBoxButton->setMaximum(6);
 
     start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray } QPushButton:hover {background-color: #398453} QPushButton:pressed {background-color: #1c4f2e}");
 
