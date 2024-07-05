@@ -385,3 +385,132 @@ int Bank:: buyInsurance(Player& player, int money) {
 void Bank:: resetInsurance(){
     insured_players.clear();
 } // сброс списка застраховавшихся в начале месяца или после ивента
+
+
+int Bank::randomEvent() {
+    int random = rand() % 11;
+
+    switch (random) {
+
+    case 1: {
+        setProdCount(getCurProdCount() / 2);
+        setRawCount(getCurRawCount() / 2);
+        setCurProdPrice(getCurProdPrice() / 2);
+        setCurRawPrice(getCurRawPrice() * 2);
+
+        for (auto& i : all) {
+            bool has_an_insurance = 0;
+
+            for (auto& k : insured_players) {
+
+                if (i.getID() == k.getID()) {
+                    has_an_insurance = 1;
+                }
+            }
+            int duty = 500;
+            if (i.getStatus() != "out" || !has_an_insurance) {
+
+                if (i.getMoney() >= 500) {
+                    i.setMoney(i.getMoney() - 500);
+                }
+
+                else if (i.getProduct() != 0 || i.getRaw() != 0) {
+                    duty -= i.getMoney();
+                    i.setMoney(0);
+
+                    while (i.getRaw() != 0 && duty > 0) {
+                        i.setRaw(i.getRaw() - 1);
+                        duty -= 50;
+                    }
+
+                    if (duty > 0) {
+
+                        while (i.getProduct() != 0 && duty > 0) {
+                            i.setProduct(i.getProduct() - 1);
+                            duty -= 100;
+                        }
+                    }
+                    // отсюда делать скриншот для отчета
+                    else {
+                        int res_2 = 0;
+                        res_2 += abs(duty);
+                        i.setMoney(res_2);
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+
+    case 2: {
+        int random_for_fabric = rand() % all.size() + 1;
+        for (auto& i : all) {
+            bool has_an_insurance = 0;
+
+            for (auto& k : insured_players) {
+
+                if (i.getID() == k.getID()) {
+                    has_an_insurance = 1;
+                }
+            }
+
+            if (i.getID() == random_for_fabric && !has_an_insurance) {
+
+                if (i.getStatus() != "out") {
+                    if (!i.getAutoFacts().empty() || !i.getDefFacts().empty()) {
+                        i.deleteFabrics(rand() % (i.getAutoFacts().size() + i.getDefFacts().size()));
+                    }
+                    else {
+                        i.setMoney(i.getMoney() - 500);
+                    }
+                }
+            }
+        }
+        return 2;
+    }
+
+    case 3: {
+        int random_for_birthday = rand() % all.size() + 1;
+        for (auto& i : all) {
+            bool has_an_insurance = 0;
+
+            for (auto& k : insured_players) {
+
+                if (i.getID() == k.getID()) {
+                    has_an_insurance = 1;
+                }
+            }
+            if (i.getStatus() != "out") {
+
+                if (i.getID() == random_for_birthday) {
+                    i.setMoney(i.getMoney() + 100 * (all.size() - 1));    // прибавляются 100 баксов от каждого игрока
+
+                    if (has_an_insurance) {
+                        i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
+                    }
+
+                    else {
+                        i.setMoney(i.getMoney() - 100 * insured_players.size());
+                    }
+                }
+                else {
+                    if (!has_an_insurance) {
+                        i.setMoney(i.getMoney() - 100);
+                    }
+                }
+            }
+        }
+        return 3;
+    }
+    case 4: {     // реализация наследства (оч сложно)
+
+
+        return 4;
+    }
+    default: {
+        return 0;
+    }
+    }
+    return 0;
+}
+

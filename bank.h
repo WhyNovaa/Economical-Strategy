@@ -60,6 +60,8 @@ public:
     void setRawCount(int a);
     void setProdCount(int a);
 
+    int randomEvent();
+
     void setAllPlayers(QVector <Player>all);
 
     QVector <Player> getAllPlayers();
