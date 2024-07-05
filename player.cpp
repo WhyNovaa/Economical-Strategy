@@ -124,6 +124,10 @@ bool Player::upgradeFacts(const int& amount) {
                     break;
                 }
             }
+            if (flag){
+                upgrade_facts.push_back(qMakePair(1, 0));
+                money -= 3000 / 2;
+            }
         }
         if(counter < amount) {
             int temp = amount - counter;
@@ -136,8 +140,11 @@ bool Player::upgradeFacts(const int& amount) {
                 }
             }
             def_facts.erase(def_facts.begin(), def_facts.begin() + temp);
+            upgrade_facts.push_back(qMakePair(temp, 0));
+            money -= temp * 3000 / 2;
         }
-        money -= amount * 3000;
+        // ПЕРЕСМОТРИТЕ НАВСЯКИЙ
+        //money -= amount * 3000 / 2;
         return true;
     }
     else
@@ -145,7 +152,7 @@ bool Player::upgradeFacts(const int& amount) {
         return false;
     }
 }
-void Player::updateUpgrade() {\
+void Player::updateUpgrade() {
     for(auto& i : upgrade_facts) {
         i.second++;
     }
@@ -154,9 +161,20 @@ void Player::updateUpgrade() {\
     while(flag) {
         flag = false;
         for(int i = 0; i < upgrade_facts.size(); i++) {
-            if(upgrade_facts[i].second == 9) {
-                for(int i = 0; i < upgrade_facts[i].first; i++) {
-                    auto_facts.push_back(AutoFactory());
+            if (upgrade_facts[i].second == 8){
+                // Предупреждение о необходимости 1500
+                box = new QMessageBox;
+                QString mess = "Для апгрейда фабрики " + QString::number(i+1) + " игроку " + QString::number(ID) +  " необходимо 1500 в противном случае деньги пропадут впустую";
+                box->setInformativeText(mess);
+                box->show();
+            }
+
+            if(upgrade_facts[i].second == 2) {
+                for(int j = 0; j < upgrade_facts[i].first; ++j) {
+                    if (getMoney() >= 1500){
+                        money -= 1500;
+                        auto_facts.push_back(AutoFactory());
+                    }
                 }
                 upgrade_facts.erase(upgrade_facts.begin() + i);
                 flag = true;
@@ -165,6 +183,7 @@ void Player::updateUpgrade() {\
         }
     }
 }
+
 void Player::updateProduct() {
     for(auto& fab : def_facts) {
         product += fab.produce();

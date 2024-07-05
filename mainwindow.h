@@ -76,6 +76,8 @@ public:
     void anti_hide();
     void updateData();
 
+
+
     // static void setLeftBtnEn(bool b);
     // static void setRightBtnEn(bool b);
 

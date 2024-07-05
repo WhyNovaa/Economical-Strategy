@@ -307,18 +307,25 @@ void MainWindow::upgradeFactSlot() {
         } else if(amount > players[current_ind].getDefFacts().size()) {
             QMessageBox::information(this, "Улучшение фабрик", "Недостаточно фабрик, повторите попытку");
         }
-        else if(amount * 3000 > players[current_ind].getMoney()) {
+        else if(amount * 3000 / 2 > players[current_ind].getMoney()) {
             QMessageBox::information(this, "Улучшение фабрик", "Недостаточно средств, повторите попытку");
         }
         else {
-            players[current_ind].upgradeFacts(amount);
-            QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
-            this->updateBankPlayers();
-            this->updatePlayers();
+            if (players[current_ind].getDefFacts().size() > 0){
+                players[current_ind].upgradeFacts(amount);
+
+                QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
+
+                this->updateBankPlayers();
+                this->updatePlayers();
+            }else
+            QMessageBox::information(this, "Улучшение фабрик", "Нечего улучшать");
         }
         delete rec1;
     }
 }
+
+
 void MainWindow::produceSlot() {
     product_dialog *rec1 = new product_dialog(this);
     rec1->show();
@@ -358,7 +365,10 @@ void MainWindow::checkNextMonth() {
         month++;
         for (auto& i: players){
             i.setFinishStatus(false);
+            i.updateUpgrade();
+            i.updateProduct();
         }
+
     }
 }
 
@@ -795,6 +805,7 @@ void MainWindow::finishTurnSlot() {
     players_interface[current_ind]->hide_out();
     checkNextMonth();
     updatePlayers();
+
 }
 
 
