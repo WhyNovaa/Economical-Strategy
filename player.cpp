@@ -193,6 +193,7 @@ void Player::updateProduct() {
     }
 }
 void Player::roundUpdate() {
+    finish_status = false;
     payPerRound();
     updateUpgrade();
     updateProduct();

@@ -135,8 +135,10 @@ private:
 
     QVector<Player> players;
     QVector<PlayerInterface*> players_interface;
-    QPushButton* start_button;
+
     Bank *b1;
+
+    QPushButton* start_button;
     QWidget* start_widget;
     QSpinBox* start_spinBoxButton;
     QGridLayout* start_grid;

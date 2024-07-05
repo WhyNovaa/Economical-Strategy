@@ -13,7 +13,7 @@ password_menu::password_menu(QWidget *parent)
 
 
     QFont font = ui->label->font();
-    font.setPointSize(13);
+    font.setPointSize(12);
     font.setBold(true);
     ui->label->setFont(font);
     ui->label->setAlignment(Qt::AlignCenter);

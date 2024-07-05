@@ -43,7 +43,7 @@ void MainWindow::createStartMenu() {
     start_button->setText("Играть");
 
     QFont font = start_button->font();
-    font.setPointSize(13);
+    font.setPointSize(12);
     font.setBold(true);
     start_button->setFont(font);
 
@@ -366,9 +366,7 @@ void MainWindow::checkNextMonth() {
     if (!not_fin) {
         month++;
         for (auto& i: players){
-            i.setFinishStatus(false);
-            i.updateUpgrade();
-            i.updateProduct();
+            i.roundUpdate();
         }
 
     }
