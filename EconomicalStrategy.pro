@@ -14,6 +14,7 @@ SOURCES += \
     fabric_dialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    month_end_dialog.cpp \
     pass_check.cpp \
     password_menu.cpp \
     player.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     fabric_dialog.h \
     factory.h \
     mainwindow.h \
+    month_end_dialog.h \
     pass_check.h \
     password_menu.h \
     player.h \

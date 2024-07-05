@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"password_menu.h"
+#include "month_end_dialog.h"
 #include<QString>
 #include<QVector>
 #include<QRandomGenerator>
@@ -470,10 +471,36 @@ void MainWindow::checkNextMonth() {
 
     if (!not_fin) {
         month++;
-        for (auto& i: players){
-            i.roundUpdate();
+        QString s = "";
+        QVector <Player>v1= b1->checkCredits();
+        if (!v1.empty()) {
+            for(auto &x: v1) {
+                s += QString::number(x.getID()) + " ";
+            }
         }
-
+        int winner = b1->auction(players);
+        int rand_code = b1->randomEvent();
+        month_end_dialog *m1 = new month_end_dialog(this);
+        if (winner != 0) {
+            m1->setAuction(" игрок " + QString::number(winner));
+        }
+        else {
+            m1->setAuction(" никто не поучаствовал в аукционе");
+        }
+        m1->setCredit("игроки " + s);
+        m1->setRandomEvent("-");
+        if(m1->exec() == QDialog::Accepted) {
+            delete m1;
+            players = b1->getAllPlayers();
+            for (auto& i: players){
+                i.roundUpdate();
+            }
+            this->updateBankPlayers();
+            b1->resetInsurance();
+            b1->pricing(); // у нас передаётся приоритет по кругу?
+            // если игрок не смог выплатить аренду, то его кикает из игры?
+            //если игрок в конце хода получил статус out, его интерфйес отключается на следущем ходе? что за это отвечает?
+        }
     }
 }
 

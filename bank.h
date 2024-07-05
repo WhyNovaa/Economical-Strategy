@@ -9,7 +9,7 @@ struct cred{
     Player pl;
     int balance;
     int duration;
-    cred(Player p1, int Money): pl(p1), balance(Money){ duration = 12;}
+    cred(Player p1, int Money): pl(p1), balance(Money){ duration = 1;} // кредит выдаётся на 3 месяца
 };
 struct offer{
     int raw;
@@ -38,7 +38,7 @@ public:
 
     void pricing();
 
-    void auction(QVector<Player> players);
+    int auction(QVector<Player> players);
 
     void resetInsurance(); // сброс списка застраховавшихся
 
