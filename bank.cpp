@@ -529,10 +529,6 @@ int Bank::randomEvent() {
 
                     if (i.getID() == random_for_birthday) {
                         i.setMoney(i.getMoney() + 100 * (real_all_size - 1));    // прибавляются 100 баксов от каждого игрока
-                        C++
-
-
-
                             if (has_an_insurance) {
                             i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
                             if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
