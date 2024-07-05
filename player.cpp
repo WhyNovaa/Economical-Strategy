@@ -37,8 +37,6 @@ void Player::setDefaultSettings() {
     auto_facts = QVector<AutoFactory>(2);
 }
 
-void Player::makeBet(const int& bet) {  }
-
 bool Player::checkIfInGame() {
     return (money >= 0);
 }
@@ -197,4 +195,30 @@ void Player::roundUpdate() {
     payPerRound();
     updateUpgrade();
     updateProduct();
+}
+
+void Player::deleteFabrics(const int& amount) {
+    srand(time(NULL));
+    QVector<Factory*> all;
+    for(auto& i : def_facts) {
+        all.push_back(&i);
+    }
+    for(auto& i : auto_facts) {
+        all.push_back(&i);
+    }
+    for(int i = 0; i < amount; i++) {
+        all.erase(all.begin() + rand() % all.size());
+    }
+    QVector<DefFactory> new_def;
+    QVector<AutoFactory> new_auto;
+    for (auto& i : all) {
+        if (typeid(*i) == typeid(DefFactory)) {
+            new_def.push_back(*dynamic_cast<DefFactory*>(i));
+        }
+        else {
+            new_auto.push_back(*dynamic_cast<AutoFactory*>(i));
+        }
+    }
+    setDefFacts(new_def);
+    setAutoFacts(new_auto);
 }
