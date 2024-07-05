@@ -661,6 +661,7 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
 
 //<----------------------------------Bank---------------------------------------------->
 void MainWindow:: auctionSlot() {
+    this->updateBankPlayers();
     bet_dialog *bet = new bet_dialog( b1->getCurRawCount(),b1->getCurProdCount(), b1->getCurRawPrice(), b1->getCurProdPrice(), this);
     bet->show();
     if(bet->exec() == QDialog::Accepted) { //взятие кредита
@@ -690,6 +691,7 @@ void MainWindow:: auctionSlot() {
 
 }
 void MainWindow:: creditSlot() {
+    this->updateBankPlayers();
     credit_dialog *rec1 = new credit_dialog(this);
     rec1->show();
     if(rec1->exec() == QDialog::Accepted) { //взятие кредита
@@ -753,7 +755,7 @@ void MainWindow:: insuranceSlot() {
 
     this->setFixedSize(400, 200);
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Взятие страховки", "Стоимость страховки на следующий ход -- 300. Взятие страховки уберегает вас от негативных эффектов событий. Хотите оформить страховку?", QMessageBox::Yes | QMessageBox::No);
-
+    this->updateBankPlayers();
     if(reply == QMessageBox::No) {
 
     }
