@@ -349,6 +349,34 @@ void MainWindow::leftButtonClicked() {
 }
 
 void MainWindow::upgradeFactSlot() {
+
+    for(int i=0; i<players.size(); i++){
+        if((money_backup[i]!=players[i].getMoney()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=players[i].getProduct()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+
+
     fabric_dialog *rec1 = new fabric_dialog(this);
     rec1->show();
     if(rec1->exec() == QDialog::Accepted) {
@@ -378,6 +406,34 @@ void MainWindow::upgradeFactSlot() {
 
 
 void MainWindow::produceSlot() {
+
+    for(int i=0; i<players.size(); i++){
+        if((money_backup[i]!=players[i].getMoney()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=players[i].getProduct()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+
+
     product_dialog *rec1 = new product_dialog(this);
     rec1->show();
     if(rec1->exec() == QDialog::Accepted) {
