@@ -169,7 +169,7 @@ void Player::updateUpgrade() {
                 box->show();
             }
 
-            if(upgrade_facts[i].second == 2) {
+            if(upgrade_facts[i].second == 9) {
                 for(int j = 0; j < upgrade_facts[i].first; ++j) {
                     if (getMoney() >= 1500){
                         money -= 1500;
