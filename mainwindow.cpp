@@ -212,26 +212,41 @@ void MainWindow::rightButtonClicked() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -278,37 +293,49 @@ void MainWindow::leftButtonClicked() {
     // PlayerInterface::setLeftBtnEn(false);
     // PlayerInterface::setRightBtnEn(false);
 
-    //qDebug()<<money_backup[0]/session_key;
-
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
     qDebug() << "left";
     check = "left";
-    qDebug()<<current_ind;
 
     players_interface[current_ind]->hide();
     if((current_ind-1>=0 && players[current_ind-1].getStatus()=="in") || (current_ind-1<0 && players[players.size()-1].getStatus()=="in")){
@@ -340,11 +367,6 @@ void MainWindow::leftButtonClicked() {
         players_interface[current_ind]->show();
     }
 
-    /*for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key) || (raw_backup[i]!=players[i].getRaw()*session_key) || (product_backup[i]!=players[i].getProduct()*session_key) || (def_backup[i]!=players[i].getDefFacts().size()*session_key) || (auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-        }
-    }*/
     checkGameOver();
 }
 
@@ -353,26 +375,41 @@ void MainWindow::upgradeFactSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -410,26 +447,40 @@ void MainWindow::produceSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -747,26 +798,41 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -799,26 +865,41 @@ void MainWindow:: auctionSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -856,26 +937,41 @@ void MainWindow:: creditSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -937,26 +1033,41 @@ void MainWindow:: insuranceSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -997,26 +1108,41 @@ void MainWindow::giveUpSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -1045,26 +1171,41 @@ void MainWindow::finishTurnSlot() {
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((raw_backup[i]!=players[i].getRaw()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((product_backup[i]!=players[i].getProduct()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
     for(int i=0; i<players.size(); i++){
         if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
         }
     }
 
@@ -1080,7 +1221,7 @@ void MainWindow::checkGameOver()
 {
 
     for (const auto &it: players){
-        if (it.getMoney() >= 30000){
+        if (it.getMoney() >= 30000 && it.getStatus()=="in"){
             QMessageBox::warning(this, "Игра окончена", "Игрок " + QString::number(it.getID()) + " победил");
             QApplication::quit();
         }
