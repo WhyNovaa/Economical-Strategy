@@ -2,11 +2,11 @@
 #include <qDebug>
 int Player::next_ID = 1;
 Player::Player() : ID(next_ID++), priority(false), money(10000), raw(2), product(2),
-    def_facts(QVector<DefFactory>(2)), auto_facts(QVector<AutoFactory>(2)), status("in") {}
+    def_facts(QVector<DefFactory>(2)), auto_facts(QVector<AutoFactory>(2)), status("in"), finish_status(false) {}
 Player::Player(const bool& _priority, const int& _money, const int& _raw, const int& _product,
                const QVector<DefFactory>& _def_facts, const QVector<AutoFactory>& _auto_facts, const QString& _status):
     ID(next_ID++), priority(_priority), money(_money), raw(_raw), product(_product), def_facts(_def_facts),
-    auto_facts(_auto_facts), status(_status) {}
+    auto_facts(_auto_facts), status(_status), finish_status(false) {}
 
 void Player::setPriority(const bool& _priority) { priority = _priority; }
 void Player::setMoney(const int& _money) { money = _money; }
@@ -36,8 +36,6 @@ void Player::setDefaultSettings() {
     def_facts = QVector<DefFactory>(2);
     auto_facts = QVector<AutoFactory>(2);
 }
-
-void Player::makeBet(const int& bet) {  }
 
 bool Player::checkIfInGame() {
     return (money >= 0);
@@ -110,6 +108,7 @@ int Player::putRawInFabrics(int amount) {
 }
 
 bool Player::upgradeFacts(const int& amount) {
+
     int counter = 0;
     if(amount <= def_facts.size())
     {
@@ -124,6 +123,10 @@ bool Player::upgradeFacts(const int& amount) {
                     break;
                 }
             }
+            if (flag){
+                upgrade_facts.push_back(qMakePair(1, 0));
+                money -= 3000 / 2;
+            }
         }
         if(counter < amount) {
             int temp = amount - counter;
@@ -136,8 +139,11 @@ bool Player::upgradeFacts(const int& amount) {
                 }
             }
             def_facts.erase(def_facts.begin(), def_facts.begin() + temp);
+            upgrade_facts.push_back(qMakePair(temp, 0));
+            money -= temp * 3000 / 2;
         }
-        money -= amount * 3000;
+        // ПЕРЕСМОТРИТЕ НАВСЯКИЙ
+        //money -= amount * 3000 / 2;
         return true;
     }
     else
@@ -145,7 +151,7 @@ bool Player::upgradeFacts(const int& amount) {
         return false;
     }
 }
-void Player::updateUpgrade() {\
+void Player::updateUpgrade() {
     for(auto& i : upgrade_facts) {
         i.second++;
     }
@@ -154,9 +160,20 @@ void Player::updateUpgrade() {\
     while(flag) {
         flag = false;
         for(int i = 0; i < upgrade_facts.size(); i++) {
+            if (upgrade_facts[i].second == 8){
+                // Предупреждение о необходимости 1500
+                box = new QMessageBox;
+                QString mess = "Для апгрейда фабрики " + QString::number(i+1) + " игроку " + QString::number(ID) +  " необходимо 1500 в противном случае деньги пропадут впустую";
+                box->setInformativeText(mess);
+                box->show();
+            }
+
             if(upgrade_facts[i].second == 9) {
-                for(int i = 0; i < upgrade_facts[i].first; i++) {
-                    auto_facts.push_back(AutoFactory());
+                for(int j = 0; j < upgrade_facts[i].first; ++j) {
+                    if (getMoney() >= 1500){
+                        money -= 1500;
+                        auto_facts.push_back(AutoFactory());
+                    }
                 }
                 upgrade_facts.erase(upgrade_facts.begin() + i);
                 flag = true;
@@ -165,6 +182,7 @@ void Player::updateUpgrade() {\
         }
     }
 }
+
 void Player::updateProduct() {
     for(auto& fab : def_facts) {
         product += fab.produce();
@@ -174,7 +192,34 @@ void Player::updateProduct() {
     }
 }
 void Player::roundUpdate() {
+    finish_status = false;
     payPerRound();
     updateUpgrade();
     updateProduct();
+}
+
+void Player::deleteFabrics(const int& amount) {
+    srand(time(NULL));
+    QVector<Factory*> all;
+    for(auto& i : def_facts) {
+        all.push_back(&i);
+    }
+    for(auto& i : auto_facts) {
+        all.push_back(&i);
+    }
+    for(int i = 0; i < amount; i++) {
+        all.erase(all.begin() + rand() % all.size());
+    }
+    QVector<DefFactory> new_def;
+    QVector<AutoFactory> new_auto;
+    for (auto& i : all) {
+        if (typeid(*i) == typeid(DefFactory)) {
+            new_def.push_back(*dynamic_cast<DefFactory*>(i));
+        }
+        else {
+            new_auto.push_back(*dynamic_cast<AutoFactory*>(i));
+        }
+    }
+    setDefFacts(new_def);
+    setAutoFacts(new_auto);
 }

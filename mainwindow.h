@@ -76,6 +76,8 @@ public:
     void anti_hide();
     void updateData();
 
+
+
     // static void setLeftBtnEn(bool b);
     // static void setRightBtnEn(bool b);
 
@@ -106,6 +108,8 @@ public:
     void createGameMenu();
     void checkGameOver();
 
+    void checkNextMonth();
+
 private slots:
     void startButtonClicked();
     void leftButtonClicked();
@@ -116,6 +120,7 @@ private slots:
     void upgradeFactSlot();
     void produceSlot();
     void giveUpSlot();
+    void finishTurnSlot();
     void createTableSlot();
 
 public slots:
@@ -130,8 +135,10 @@ private:
 
     QVector<Player> players;
     QVector<PlayerInterface*> players_interface;
-    QPushButton* start_button;
+
     Bank *b1;
+
+    QPushButton* start_button;
     QWidget* start_widget;
     QSpinBox* start_spinBoxButton;
     QGridLayout* start_grid;

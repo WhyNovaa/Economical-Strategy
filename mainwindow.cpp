@@ -43,7 +43,7 @@ void MainWindow::createStartMenu() {
     start_button->setText("Играть");
 
     QFont font = start_button->font();
-    font.setPointSize(13);
+    font.setPointSize(12);
     font.setBold(true);
     start_button->setFont(font);
 
@@ -51,6 +51,8 @@ void MainWindow::createStartMenu() {
     start_label->setFont(font);
 
     start_spinBoxButton->setFont(font);
+    start_spinBoxButton->setMinimum(2);
+    start_spinBoxButton->setMaximum(6);
 
     start_button->setStyleSheet("QPushButton { background-color: #5ac47f; color: black; border: 2px solid gray } QPushButton:hover {background-color: #398453} QPushButton:pressed {background-color: #1c4f2e}");
 
@@ -184,7 +186,12 @@ void MainWindow::slot_pass_check(int answ)
     if(flag == 1){
         pch->close();
         players_interface[current_ind]->show();
-        players_interface[current_ind]->anti_hide();
+        if (players[current_ind].getFinishStatus() == true){
+            players_interface[current_ind]->hide_out();
+        }
+        else{
+            players_interface[current_ind]->anti_hide();
+        }
         flag = -1;
     }
 }
@@ -233,12 +240,10 @@ void MainWindow::rightButtonClicked() {
     check = "right";
 
     if((current_ind+1 <= players.size()-1 && players[current_ind+1].getStatus()=="in") || (current_ind+1>players.size()-1 && players[0].getStatus()=="in")){
-
         pch = new pass_check(this);
         pch -> show();
         pch->activateWindow();
         connect(pch, &pass_check::dialogClosed, this, &MainWindow::onDialogClosed);
-        //pch->exec();
 
         connect(this, &MainWindow::signal_index, pch, &pass_check::slot_index);
         connect(pch, &pass_check::signal_pass_check, this, &MainWindow::slot_pass_check);
@@ -353,18 +358,25 @@ void MainWindow::upgradeFactSlot() {
         } else if(amount > players[current_ind].getDefFacts().size()) {
             QMessageBox::information(this, "Улучшение фабрик", "Недостаточно фабрик, повторите попытку");
         }
-        else if(amount * 3000 > players[current_ind].getMoney()) {
+        else if(amount * 3000 / 2 > players[current_ind].getMoney()) {
             QMessageBox::information(this, "Улучшение фабрик", "Недостаточно средств, повторите попытку");
         }
         else {
-            players[current_ind].upgradeFacts(amount);
-            QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
-            this->updateBankPlayers();
-            this->updatePlayers();
+            if (players[current_ind].getDefFacts().size() > 0){
+                players[current_ind].upgradeFacts(amount);
+
+                QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
+
+                this->updateBankPlayers();
+                this->updatePlayers();
+            }else
+            QMessageBox::information(this, "Улучшение фабрик", "Нечего улучшать");
         }
         delete rec1;
     }
 }
+
+
 void MainWindow::produceSlot() {
     product_dialog *rec1 = new product_dialog(this);
     rec1->show();
@@ -389,6 +401,23 @@ void MainWindow::produceSlot() {
             this->updatePlayers();
         }
         delete rec1;
+    }
+}
+
+void MainWindow::checkNextMonth() {
+    bool not_fin = false;
+    for (const auto& i: players){
+        if (!(i.getStatus() == "out" or i.getFinishStatus() == true)) {
+            not_fin = true;
+        }
+    }
+
+    if (!not_fin) {
+        month++;
+        for (auto& i: players){
+            i.roundUpdate();
+        }
+
     }
 }
 
@@ -487,7 +516,7 @@ PlayerInterface::PlayerInterface(const Player& pl, const QMainWindow* w) {
 
     finish_turn  = new QPushButton;
     finish_turn->setText("Закончить ход");
-    // connect(finish_turn, SIGNAL(clicked()), w, SLOT(*******()));
+    connect(finish_turn, SIGNAL(clicked()), w, SLOT(finishTurnSlot()));
 
     upgr_fact->setFont(font);
     make_bid->setFont(font);
@@ -558,11 +587,13 @@ void PlayerInterface:: setPlayer(const Player& g1) {
 }
 
 void PlayerInterface::updateData() {
+
     money->setText("Деньги: " + QString::number(current_player.getMoney()));
     raw->setText("Сырье: " + QString::number(current_player.getRaw()));
     product->setText("Готового сырья: " + QString::number(current_player.getProduct()));
     def_facts->setText("Обычных фабрик: " + QString::number(current_player.getDefFacts().size()));
     auto_facts->setText("Автоматических фабрик: " + QString::number(current_player.getAutoFacts().size()));
+    current_month->setText("Месяц " + QString::number(MainWindow::month));
 }
 
 void PlayerInterface::show() {
@@ -707,6 +738,7 @@ void MainWindow:: auctionSlot() {
         }
     }
 
+    this->updateBankPlayers();
     bet_dialog *bet = new bet_dialog( b1->getCurRawCount(),b1->getCurProdCount(), b1->getCurRawPrice(), b1->getCurProdPrice(), this);
     bet->show();
     if(bet->exec() == QDialog::Accepted) { //взятие кредита
@@ -763,6 +795,7 @@ void MainWindow:: creditSlot() {
         }
     }
 
+    this->updateBankPlayers();
     credit_dialog *rec1 = new credit_dialog(this);
     rec1->show();
     if(rec1->exec() == QDialog::Accepted) { //взятие кредита
@@ -853,7 +886,7 @@ void MainWindow:: insuranceSlot() {
 
     this->setFixedSize(400, 200);
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Взятие страховки", "Стоимость страховки на следующий ход -- 300. Взятие страховки уберегает вас от негативных эффектов событий. Хотите оформить страховку?", QMessageBox::Yes | QMessageBox::No);
-
+    this->updateBankPlayers();
     if(reply == QMessageBox::No) {
 
     }
@@ -872,9 +905,6 @@ void MainWindow:: insuranceSlot() {
     players=b1->getAllPlayers();
     this->updatePlayers();
 }
-
-
-
 
 //---------------------------------GameOver-----------------------------------------
 
@@ -920,9 +950,44 @@ void MainWindow::giveUpSlot() {
         players[current_ind].setDefFacts(QVector<DefFactory>(0));
         players[current_ind].setStatus("out");
         b1->setAllPlayers(players);
+        players_interface[current_ind]->hide_out();
+        checkNextMonth();
         updatePlayers();
     }
+}
 
+void MainWindow::finishTurnSlot() {
+
+    for(int i=0; i<players.size(); i++){
+        if((money_backup[i]!=players[i].getMoney()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=players[i].getProduct()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+        }
+    }
+
+    players[current_ind].setFinishStatus(true);
+    players_interface[current_ind]->hide_out();
+    checkNextMonth();
+    updatePlayers();
 }
 
 

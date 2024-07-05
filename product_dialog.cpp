@@ -4,7 +4,6 @@ product_dialog::product_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHin
 
     spin = new QSpinBox;
 
-
     QPushButton* pcmdOk = new QPushButton("&Отправить сырье на переработку");
     QPushButton* quit = new QPushButton("&Выйти");
     connect(pcmdOk, SIGNAL(clicked()), SLOT(accept()));

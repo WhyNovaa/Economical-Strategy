@@ -4,6 +4,7 @@
 #include "factory.h"
 
 #include <QVector>
+#include <QMessageBox>
 
 class Player
 {
@@ -22,6 +23,7 @@ private:
     // 40 за готовое сырье
 public:
     static int next_ID;
+    QMessageBox* box;
 
     Player();
     Player(const bool& _priority, const int& _money, const int& _raw, const int& _product,
@@ -53,8 +55,8 @@ public:
     void updateProduct(); //достаю все готовое сырье
     int putRawInFabrics(int amount); //возвращает 1 - все норм, -1 - недостаточно места, -2 - недостаточно денег
     void setDefaultSettings();
-    void makeBet(const int& bet);
     bool checkIfInGame();
+    void deleteFabrics(const int& amount); //проверяйте количество фабрик заранее
 
 
 
