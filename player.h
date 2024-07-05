@@ -56,7 +56,7 @@ public:
     int putRawInFabrics(int amount); //возвращает 1 - все норм, -1 - недостаточно места, -2 - недостаточно денег
     void setDefaultSettings();
     bool checkIfInGame();
-    void deleteFabrics(const int& amount); //проверяйте количество фабрик заранее
+    bool deleteFabrics(const int& amount); //проверяйте количество фабрик заранее
 
 
 
