@@ -111,7 +111,8 @@ int Bank:: add_offer(int raw, int prod, Player pl) {
     }
 }
 
-void Bank::auction(QVector<Player> players) {
+int Bank::auction(QVector<Player> players) {
+    players = all; //костыль
     int a;
     bool b1 = 1;
     offer o(1,-1,-1);
@@ -122,8 +123,9 @@ void Bank::auction(QVector<Player> players) {
             if (cur_offers[j].ID == a) {
                 if (players[i].getStatus() == "out") //?
                 {
-                    b1 = 1;
-                }
+                    qDebug() << "works";
+                    cur_offers[j].prod = 0; cur_offers[j].raw = 0;
+                } //обнуляем предложение выбывшего игрока
                 b1 = 0;
                 break;
             }
@@ -165,6 +167,9 @@ void Bank::auction(QVector<Player> players) {
 
     std::sort(cur_offers.begin(), cur_offers.end(), id_comp_offers); //синхронизируем вектор предложений с ветором игроков
     QVector<int> margin;
+    for(int i = 0; i < cur_offers.size();i++) {
+        qDebug() << i + 1 << " " << cur_offers[i].prod << " " << cur_offers[i].raw << "/";
+    }
     for (int i = 0; i < cur_offers.size(); i++) {
         if (cur_offers[i].prod && cur_offers[i].raw) {
         margin.push_back((cur_offers[i].raw - cur_raw_price ) + (cur_prod_price - cur_offers[i].prod));  // маржа игрока
@@ -185,7 +190,7 @@ void Bank::auction(QVector<Player> players) {
     for (int i =0; i < margin.size();i++) {
         if (margin[i] > max) {
             max = margin[i];
-            max_ind = i; // ищем максимально выгодное предложение
+            max_ind = i + 1; // ищем максимально выгодное предложение
         }
     }
     for (int i = 0 ; i < margin.size(); i++) {
@@ -198,11 +203,13 @@ void Bank::auction(QVector<Player> players) {
             max_ind = top_offers[i].getID();
         }
     }       // нашли победителя и записали его id
-
+    if (max == 0) {
+        return 0;
+    }
     for (int i =0; i < players.size(); i ++) {
         if(players[i].getID() != max_ind) {
             players[i].setMoney(players[i].getMoney() + cur_offers[i].raw);
-            players[i].setMoney(players[i].getProduct() + cur_prod_count);
+            players[i].setProduct(players[i].getProduct() + cur_prod_count);
             // возвращаем деньги ипродукцию, которые банк взял под залог
         }
         else {
@@ -210,6 +217,13 @@ void Bank::auction(QVector<Player> players) {
             players[i].setRaw(players[i].getRaw() + cur_raw_count);
         }
     }
+    all = players;
+    qDebug() << max_ind << " " << max ;
+    for(int i = 0; i < margin.size();i++) {
+        qDebug() << i + 1 << " " << margin[i] << "/";
+    }
+    cur_offers.clear();
+    return max_ind;
             //.!!! осталось синхронизировать полученый вектор  с вектором в мейнвиндоу
     // top_offers_ids.push_back( cur_offers[max_ind].ID);
     // for (int i =0; i < margin.size();i++) {
@@ -300,16 +314,21 @@ int Bank:: credit(Player& player, int money) {
     }
 }//взятие кредита, 0, если не смог купить, 1,если смог купить, -1 если уже взял кредит
 
-QVector<Player> Bank:: checkCredits() {
-    QVector <Player>v1;
+QVector <Player> Bank:: checkCredits() {
+    QVector <Player> v;
     for ( auto &it: credit_defaulters) {
         it.duration--;
         if (it.duration == 0) {
-            v1.push_back(it.pl);
+            for(int i = 0; i < all.size();i++){
+                if(all[i].getID() == it.pl.getID()) {
+                    all[i].setStatus("out");
+                    v.push_back(all[i]);
+                }
+            }
         }
     }
-    return v1;
-} //проверка списка должников, возвращает Qvector просрочивших оплату кредита
+    return v;
+} //Ставим статус out всем игрокам просрочившим кредит нужно прописать
 
 int Bank::payCredit(Player& player, int money){
     if (player.getMoney() < money) {
