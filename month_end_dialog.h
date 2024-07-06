@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include<QTextEdit>
 #include <QSpinBox>
 
 class month_end_dialog : public QDialog{
@@ -20,9 +21,9 @@ public:
     void setCredit(QString text);
     void setRandomEvent(QString text);
 private:
-    QLabel *credit;
-    QLabel *auction;
-    QLabel *random_event;
+    QTextEdit *credit;
+    QTextEdit *auction;
+    QTextEdit *random_event;
 };
 
 

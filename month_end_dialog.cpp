@@ -1,9 +1,16 @@
 #include "month_end_dialog.h"
+#include <QTextEdit>
 month_end_dialog:: month_end_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHint | Qt::WindowSystemMenuHint) {
 
-    credit = new QLabel;
-    auction = new QLabel;
-    random_event = new QLabel;
+    credit = new QTextEdit;
+    auction = new QTextEdit;
+    random_event = new QTextEdit;
+    credit->setDisabled(1);
+    auction->setDisabled(1);
+    random_event->setDisabled(1);
+    credit->setAlignment(Qt::AlignmentFlag::AlignHCenter | Qt::AlignmentFlag::AlignVCenter);
+    auction->setAlignment(Qt::AlignmentFlag::AlignHCenter | Qt::AlignmentFlag::AlignVCenter);
+    random_event->setAlignment(Qt::AlignmentFlag::AlignHCenter | Qt::AlignmentFlag::AlignVCenter);
 
 
     QPushButton* pcmdOk = new QPushButton("&Перейти на следующий раунд");
