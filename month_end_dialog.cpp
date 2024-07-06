@@ -13,7 +13,7 @@ month_end_dialog:: month_end_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTit
     QLabel *l3 = new QLabel("Произошедшие события: ");
 
     QFont font = l1->font();
-    font.setPointSize(13);
+    font.setPointSize(10);
     font.setBold(true);
 
     l1->setFont(font);
@@ -27,13 +27,12 @@ month_end_dialog:: month_end_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTit
 
     QGridLayout* grid = new QGridLayout;
 
-
-    grid->addWidget(auction, 0, 0, 1, 3);
-    grid->addWidget(l1, 0, 3, 1, 3);
-    grid->addWidget(l2, 1, 3, 1, 3);
-    grid->addWidget(credit, 1, 0, 1, 3);
-    grid->addWidget(random_event, 2, 0, 1, 3);
-    grid->addWidget(l3, 2, 3, 1, 3);
+    grid->addWidget(l1, 0, 0, 1, 3);
+    grid->addWidget(auction, 0, 3, 1, 3);
+    grid->addWidget(l2, 1, 0, 1, 3);
+    grid->addWidget(credit, 1, 3, 1, 3);
+    grid->addWidget(l3, 2, 0, 1, 3);
+    grid->addWidget(random_event, 2, 3, 1, 3);
     grid->addWidget(pcmdOk, 3, 0, 1, 6);
 
 
@@ -42,7 +41,7 @@ month_end_dialog:: month_end_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTit
     this->setWindowTitle("Конец месяца");
     this->setModal(true);
 
-    this->setFixedSize(600, 400);
+    this->setFixedSize(1000, 400);
 
     QPixmap bkgnd(":resources/bg.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);

@@ -596,6 +596,54 @@ void MainWindow::checkNextMonth() {
                 }
             }
             b1->setOuts(); b1->setRandomPlayer(0);
+
+
+
+            // int current_priority_player = 0;
+            // int new_priority_player = 0;
+            // for (int i = 0; i < players.size(); i++) {
+            //     if (players[i].getPriority() == true) {
+            //         qDebug() << i << " iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+
+            //         current_priority_player = i;
+            //         // players[i].setPriority(false);
+            //         break;
+            //     }
+            // }
+            // bool has_next = false;
+            // for (int i = current_priority_player; i < players.size(); i++) {
+            //     if (players[i].getPriority() == false and players[i].getStatus() == "in" and i != current_priority_player) {
+            //         qDebug() << i << " new_priority_player new_priority_player new_priority_player";
+
+            //         new_priority_player = i;
+            //         has_next = true;
+            //         break;
+            //     }
+            // }
+            // if (!has_next) {
+            //     for (int i = 0; i < current_priority_player; i++) {
+            //         if (players[i].getPriority() == false and players[i].getStatus() == "in") {
+            //             new_priority_player = i;
+            //             break;
+            //         }
+            //     }
+            // }
+
+            // players[current_priority_player].setPriority(false);
+            // players[new_priority_player].setPriority(true);
+
+
+            // // debug debug debug debug debug debug debug debug debug
+
+            // qDebug() << "list of players and there priority start";
+            // for (int i = 0; i < players.size(); i++) {
+            //     qDebug() << i << " " << players[i].getPriority();
+            // }
+            // qDebug() << "list of players and there priority end";
+
+            // // debug debug debug debug debug debug debug debug debug
+
+
             // у нас передаётся приоритет по кругу?
             // если игрок не смог выплатить аренду, то его кикает из игры?
             //если игрок в конце хода получил статус out, его интерфйес отключается на следущем ходе? что за это отвечает?
