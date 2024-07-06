@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "player.h"
 
-struct cred{
+    struct cred{
     Player pl;
     int balance;
     int duration;
@@ -22,7 +22,8 @@ struct offer{
 
 class Bank {
 private:
-
+    QVector<int> ids_of_outs; //выбывшие в результате события
+    int random_player; //игрок, с которым произошло случайное событие
     QVector<cred> credit_defaulters; // Игроки, просрочившие кредит
     QVector<Player> insured_players; // Игроки со страховкой
     QVector<Player> all;
@@ -35,6 +36,14 @@ private:
 public:
 
     Bank(QVector<Player> p) : all(p) {this->pricing();}
+
+    QVector<int> getOuts();
+
+    void setOuts();
+
+    int getRandomPlayer();
+
+    void setRandomPlayer(int a);
 
     void pricing();
 
@@ -86,3 +95,4 @@ public:
 };
 
 #endif // BANK_H
+

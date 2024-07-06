@@ -523,9 +523,11 @@ void MainWindow::checkNextMonth() {
 
     if (!not_fin) {
         month++;
-        QString s = "";
+        QString s = " никто не просрочил кредит";
+        QString r = " никаких событий не произошло";
         QVector <Player>v1= b1->checkCredits();
         if (!v1.empty()) {
+            s = "игроки";
             for(auto &x: v1) {
                 s += QString::number(x.getID()) + " ";
             }
@@ -537,10 +539,44 @@ void MainWindow::checkNextMonth() {
             m1->setAuction(" игрок " + QString::number(winner));
         }
         else {
-            m1->setAuction(" никто не поучаствовал в аукционе");
+            m1->setAuction(" никто не принял участие в аукционе");
         }
-        m1->setCredit("игроки " + s);
-        m1->setRandomEvent("-");
+        if (rand_code) {
+            switch (rand_code){
+            case 1: { r = "Произошёл кризис в банке! Банк продаёт всё очень дёшево и покупает очень дорого! Со всех незастрахованных игроков снято 500 валюты, либо 1 сырьё за каждые 50 единиц долга, либо 1 продуция за 100 едениц долга. Игроки, выбывшие из-за кризиса: ";
+                QString h;
+                if (!b1->getOuts().empty()) {
+                    QVector <int> l1 = b1->getOuts();
+                    h = "Игроки, выбывшие из-за кризиса: ";
+                    for (int i =0; i < l1.size(); i++) {
+                        h += QString::number(l1[i]) + " "; //добавляем строчку с выбывшими игроками если такие есть
+                    }
+                }
+                r+=h;
+                break;}
+            case 2: {r= "У игрока " + QString::number(b1->getRandomPlayer()) + " пожар на производстве! Сгорело от одной до почти всех фабрик с сырьём внутри них! Если игрок застрахован, банк восстановит имущество.";
+                QString h;
+                if (!b1->getOuts().empty()) {
+                    h = "Иза-за пожара игрок выбыл из игры! ";
+                }
+                r+= h;
+                break;}
+            case 3: {r = "У игрока " + QString::number(b1->getRandomPlayer()) + " день рождения! Со всех незастрахованных игроков списано по 100 валюты на подарок игроку.";
+                QString h;
+                if (!b1->getOuts().empty()) {
+                    QVector <int> l1 = b1->getOuts();
+                    h = "Игроки, выбывшие из-за дня рождения: ";
+                    for (int i =0; i < l1.size(); i++) {
+                        h += QString::number(l1[i]) + " "; //добавляем строчку с выбывшими игроками если такие есть
+                    }
+                }
+                r+=h;
+                break;}
+            case 4: {r = "Игрок " + QString::number(b1->getRandomPlayer()) + " получил наследство!;"; break;}
+            }
+        }
+        m1->setCredit(s);
+        m1->setRandomEvent(r);
         if(m1->exec() == QDialog::Accepted) {
             delete m1;
             players = b1->getAllPlayers();
@@ -549,12 +585,27 @@ void MainWindow::checkNextMonth() {
             }
             this->updateBankPlayers();
             b1->resetInsurance();
-            b1->pricing(); // у нас передаётся приоритет по кругу?
+            // режем цены в случае кризиса в банке
+            b1->pricing();
+            if (rand_code == 1) {
+                b1->setProdCount(b1->getCurProdCount() / 2);
+                b1->setRawCount(b1->getCurRawCount() * 2);
+                b1->setCurProdPrice(b1->getCurProdPrice() * 2);
+                b1->setCurRawPrice(b1->getCurRawPrice() / 2);
+                if (b1->getCurProdCount() == 0) {
+                    b1->setProdCount(1); // проверка чтобы банк не покупал 0 прода
+                }
+            }
+            b1->setOuts(); b1->setRandomPlayer(0);
+            // у нас передаётся приоритет по кругу?
             // если игрок не смог выплатить аренду, то его кикает из игры?
             //если игрок в конце хода получил статус out, его интерфйес отключается на следущем ходе? что за это отвечает?
         }
+
     }
 }
+
+
 
 int MainWindow::month = 1;
 

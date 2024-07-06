@@ -23,7 +23,13 @@ void Bank:: setInsuredPlayers(const QVector<Player> insuredList) {
 QVector<Player>Bank:: getInsuredPlayers() {
     return insured_players;
 }
+QVector<int> Bank:: getOuts() {
+    return ids_of_outs;
+}
 
+int Bank:: getRandomPlayer() {
+    return random_player;
+}
 bool Bank::checkGameOver()
 {
     return all.size() == 1;
@@ -60,6 +66,16 @@ void Bank:: setAllPlayers(QVector <Player>all1) {
 QVector <Player> Bank:: getAllPlayers(){
     return all;
 }
+void Bank:: setOuts() {
+    ids_of_outs.clear();
+}
+
+
+
+void Bank:: setRandomPlayer(int a) {
+    random_player = a;
+}
+
 // получение qvector -- списка застраховавшихся в этом месяце
 //геттеры и сеттеры
 
@@ -141,24 +157,24 @@ int Bank::auction(QVector<Player> players) {
     QVector<double> coefficents;
     for (auto& i : players) {
         if (i.getStatus() != "out") {
-        int auto_in_money = 0;
-        int def_in_money = 0;
-        int cash = i.getMoney();
-        int raw_in_money = i.getRaw();
-        int product_in_money = i.getProduct();
-        double kef = 0;
+            int auto_in_money = 0;
+            int def_in_money = 0;
+            int cash = i.getMoney();
+            int raw_in_money = i.getRaw();
+            int product_in_money = i.getProduct();
+            double kef = 0;
 
-        for (auto& j : i.getAutoFacts()) {
-            auto_in_money++;
-        }
+            for (auto& j : i.getAutoFacts()) {
+                auto_in_money++;
+            }
 
-        for (auto& j : i.getDefFacts()) {
-            def_in_money++;
-        }
+            for (auto& j : i.getDefFacts()) {
+                def_in_money++;
+            }
 
-        kef += auto_in_money * 5000 + def_in_money * 1000 + cash + raw_in_money * 50 + product_in_money * 100;
-        kef /= 10000;
-        coefficents.push_back(kef);
+            kef += auto_in_money * 5000 + def_in_money * 1000 + cash + raw_in_money * 50 + product_in_money * 100;
+            kef /= 10000;
+            coefficents.push_back(kef);
         }
         else {
             coefficents.push_back(1); // если игрок банкрот, его кэф равен 1
@@ -172,7 +188,7 @@ int Bank::auction(QVector<Player> players) {
     }
     for (int i = 0; i < cur_offers.size(); i++) {
         if (cur_offers[i].prod && cur_offers[i].raw) {
-        margin.push_back((cur_offers[i].raw - cur_raw_price ) + (cur_prod_price - cur_offers[i].prod));  // маржа игрока
+            margin.push_back((cur_offers[i].raw - cur_raw_price ) + (cur_prod_price - cur_offers[i].prod));  // маржа игрока
         }
         if (!cur_offers[i].prod && !cur_offers[i].raw) {
             margin.push_back(0);
@@ -204,6 +220,7 @@ int Bank::auction(QVector<Player> players) {
         }
     }       // нашли победителя и записали его id
     if (max == 0) {
+        cur_offers.clear();
         return 0;
     }
     for (int i =0; i < players.size(); i ++) {
@@ -224,7 +241,7 @@ int Bank::auction(QVector<Player> players) {
     }
     cur_offers.clear();
     return max_ind;
-            //.!!! осталось синхронизировать полученый вектор  с вектором в мейнвиндоу
+        //.!!! осталось синхронизировать полученый вектор  с вектором в мейнвиндоу
     // top_offers_ids.push_back( cur_offers[max_ind].ID);
     // for (int i =0; i < margin.size();i++) {
     //     if (margin[i] == max) {
@@ -408,15 +425,10 @@ void Bank:: resetInsurance(){
 
 int Bank::randomEvent() {
     int random = rand() % 11;
-
     switch (random) {
 
     case 1: {
-        setProdCount(getCurProdCount() / 2);
-        setRawCount(getCurRawCount() / 2);
-        setCurProdPrice(getCurProdPrice() / 2);
-        setCurRawPrice(getCurRawPrice() * 2);
-
+        random_player = 0;
         for (auto& i : all) {
             bool has_an_insurance = 0;
 
@@ -448,6 +460,10 @@ int Bank::randomEvent() {
                             i.setProduct(i.getProduct() - 1);
                             duty -= 100;
                         }
+                        if (duty > 0) {
+                            i.setStatus("out");
+                            ids_of_outs.push_back(i.getID());
+                        } //не смог погасить долг, добавляем в вектор выбывших игроков
                     }
                     // отсюда делать скриншот для отчета
                     else {
@@ -462,25 +478,43 @@ int Bank::randomEvent() {
     }
 
     case 2: {
-        int random_for_fabric = rand() % all.size() + 1;
-        for (auto& i : all) {
-            bool has_an_insurance = 0;
-
-            for (auto& k : insured_players) {
-
-                if (i.getID() == k.getID()) {
-                    has_an_insurance = 1;
-                }
+        qDebug() << "crushs?";
+        int random_for_fabric = 0;
+        while(true){
+            random_for_fabric = rand() % all.size();
+            if (all[random_for_fabric].getStatus() != "out"){
+                break;
             }
+        }
+        random_for_fabric++;
+        for (auto& i : all) {
+            if (i.getStatus() != "out"){
+                bool has_an_insurance = 0;
 
-            if (i.getID() == random_for_fabric && !has_an_insurance) {
+                for (auto& k : insured_players) {
 
-                if (i.getStatus() != "out") {
-                    if (!i.getAutoFacts().empty() || !i.getDefFacts().empty()) {
-                        i.deleteFabrics(rand() % (i.getAutoFacts().size() + i.getDefFacts().size()));
+                    if (i.getID() == k.getID()) {
+                        has_an_insurance = 1;
                     }
-                    else {
-                        i.setMoney(i.getMoney() - 500);
+                }
+                if (i.getID() == random_for_fabric){
+                    random_player = i.getID();
+                }
+                if (i.getID() == random_for_fabric && !has_an_insurance) {
+                    random_player = i.getID(); // пометили игрока
+                    if (i.getStatus() != "out") {
+                        if (!i.getAutoFacts().empty() || !i.getDefFacts().empty()) {
+                            qDebug() << "fire" << i.getID()
+                                ;
+                            i.deleteFabrics(rand() % (i.getAutoFacts().size() + i.getDefFacts().size()));
+                        }
+                        else {
+                            i.setMoney(i.getMoney() - 500);
+                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
+                                i.setStatus("out");
+                                ids_of_outs.push_back(i.getID()); // пометили игрока как выбывшего
+                            }
+                        }
                     }
                 }
             }
@@ -489,29 +523,45 @@ int Bank::randomEvent() {
     }
 
     case 3: {
-        int random_for_birthday = rand() % all.size() + 1;
-        for (auto& i : all) {
-            bool has_an_insurance = 0;
-
-            for (auto& k : insured_players) {
-
-                if (i.getID() == k.getID()) {
-                    has_an_insurance = 1;
-                }
+        int real_all_size = 0;
+        for (auto& i: all){
+            if (i.getStatus() != "out"){
+                ++real_all_size;
             }
-            if (i.getStatus() != "out") {
+        }
+        int random_for_birthday = 0;
+        while(true){
+            random_for_birthday = rand() % all.size();
+            if (all[random_for_birthday].getStatus() != "out"){
+                break;
+            }
+        }
+        random_player = all[random_for_birthday].getID();
+        random_for_birthday++;
+        for (auto& i : all) {
+            if (i.getStatus() != "out"){
 
-                if (i.getID() == random_for_birthday) {
-                    i.setMoney(i.getMoney() + 100 * (all.size() - 1));    // прибавляются 100 баксов от каждого игрока
+                bool has_an_insurance = 0;
+
+                for (auto& k : insured_players) {
+
+                    if (i.getID() == k.getID()) {
+                        has_an_insurance = 1;
+                    }
+                }
+                if (i.getStatus() != "out") {
 
                     if (has_an_insurance) {
                         i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
 
                     if (i.getID() == random_for_birthday) {
                         i.setMoney(i.getMoney() + 100 * (real_all_size - 1));    // прибавляются 100 баксов от каждого игрока
+
+
+
                         if (has_an_insurance) {
                             i.setMoney(i.getMoney() - 100 * (insured_players.size() - 1));
-                            if (i.getMoney() < 0) { //?????????Вопрос по логике выхода из игры????????????????
+                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
                                 i.setStatus("out");
                             }
                         }
@@ -522,18 +572,18 @@ int Bank::randomEvent() {
                                 i.setStatus("out");
                             }
                         }
-
                     }
-
                     else {
-                        i.setMoney(i.getMoney() - 100 * insured_players.size());
+                        if (!has_an_insurance) {
+                            i.setMoney(i.getMoney() - 100);
+                            if (i.getMoney() < 0){ //?????????Вопрос по логике выхода из игры????????????????
+                                i.setStatus("out");
+                                ids_of_outs.push_back(i.getID());
+                            }
+                        }
                     }
                 }
-                else {
-                    if (!has_an_insurance) {
-                        i.setMoney(i.getMoney() - 100);
-                    }
-                }
+
             }
         }
         return 3;
@@ -549,4 +599,3 @@ int Bank::randomEvent() {
     }
     return 0;
 }
-
