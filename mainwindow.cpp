@@ -440,9 +440,10 @@ void MainWindow::upgradeFactSlot() {
         else {
             if (players[current_ind].getDefFacts().size() > 0){
                 players[current_ind].upgradeFacts(amount);
-
                 QMessageBox::information(this, "Улучшение фабрик", "Операция выполнена успешно");
-
+                if (b1->getRandomPlayer() == players[current_ind].getID()) {
+                    players[current_ind].setMoney(players[current_ind].getMoney() + 750 * amount); //криво косо но должно работать
+                }
                 this->updateBankPlayers();
                 this->updatePlayers();
             }else
@@ -578,7 +579,7 @@ void MainWindow::checkNextMonth() {
                 }
                 r+=h;
                 break;}
-            case 4: {r = "Игрок " + QString::number(b1->getRandomPlayer()) + " получил наследство!;"; break;}
+            case 4: {r = "Игрок " + QString::number(b1->getRandomPlayer()) + " получил наследство и скидку 50% на страховку и первый взнос при улучшении фабрик в следующем ходу!"; break;}
             }
         }
         m1->setCredit(s);
@@ -602,7 +603,10 @@ void MainWindow::checkNextMonth() {
                     b1->setProdCount(1); // проверка чтобы банк не покупал 0 прода
                 }
             }
-            b1->setOuts(); b1->setRandomPlayer(0);
+            b1->setOuts();
+            if(rand_code != 4) {
+                b1->setRandomPlayer(0);
+            }
 
 
 
