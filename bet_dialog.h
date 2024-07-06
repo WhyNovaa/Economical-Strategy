@@ -18,6 +18,8 @@ public:
 private:
     QLineEdit *raw_price;
     QLineEdit *prod_price;
+    int raw;
+    int product;
 };
 
 
