@@ -396,20 +396,25 @@ int Bank::payCredit(Player& player, int money){
 }
 
 int Bank:: buyInsurance(Player& player, int money) {
-    if (player.getMoney() < money) {
+    if (player.getMoney() < money || ( (player.getMoney() < money*0.5) && (random_player!= 0 && random_player == player.getID()))  ) {
         return 0;
     }
     else{
         for (auto &x: insured_players) {
             if(x.getID() == player.getID()) {
-                qDebug() << "found";
+
                 return -1;
             }
         }
         for(auto &x: all) {
             if(x.getID() == player.getID()) {
-                qDebug() << "found";
-                x.setMoney(player.getMoney() - money);
+                if (random_player!= 0 && random_player == player.getID()){
+                    qDebug() << "!";
+                    x.setMoney(player.getMoney() - (money / 2));
+                }
+                else{
+                x.setMoney(player.getMoney() - money );
+                }
                 insured_players.push_back(x);
                 return 1;
             }
@@ -586,16 +591,27 @@ int Bank::randomEvent() {
 
             }
         }
+        }
         return 3;
     }
-    /*case 4: {     // реализация наследства (оч сложно)
-
+        case 4: {
+        int random_for_heritage = 0;
+        while (true) {
+            random_for_heritage = rand() % all.size();
+            if (all[random_for_heritage].getStatus() != "out") {
+                break;
+            }
+        }
+        random_for_heritage++;
+        random_player = random_for_heritage;
+        for (auto& i : all) {
+            if (i.getStatus() != "out" && i.getID() == random_for_heritage) {
+                int random_q_value = i.getMoney() * 0.2;
+                i.setMoney(i.getMoney() + random_q_value);
+            }
+        }
 
         return 4;
-    }
-    default: {
-        return 0;
-    }*/
     }
     return 0;
 }
