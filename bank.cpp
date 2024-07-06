@@ -593,7 +593,7 @@ int Bank::randomEvent() {
 
         return 4;
     }
-    /*default: {
+    default: {
         return 0;
     }*/
     }
