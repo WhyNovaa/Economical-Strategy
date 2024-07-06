@@ -1,6 +1,6 @@
 #include "pass_check.h"
 #include "ui_pass_check.h"
-#include"sha1.h"
+#include"sha256.h"
 #include"mainwindow.h"
 
 pass_check::pass_check(QWidget *parent)
@@ -51,10 +51,10 @@ void pass_check::slot_index(QString true_pass, int i)
 void pass_check::on_pushButton_clicked()
 {
     QString pass = ui->lineEdit->text();
-    if((QString::fromStdString(sha1(pass.toStdString()))) == True_pass){
+    if((QString::fromStdString(sha256(pass.toStdString()))) == True_pass){
         emit signal_pass_check(1);
     }else{
-        if( pass=="" || (QString::fromStdString(sha1(pass.toStdString())))!=True_pass){
+        if( pass=="" || (QString::fromStdString(sha256(pass.toStdString())))!=True_pass){
             //qDebug()<< "here";
             ui->label->setText("Wrong password try again");
             ui->lineEdit->clear();

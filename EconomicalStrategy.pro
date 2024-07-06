@@ -20,7 +20,7 @@ SOURCES += \
     player.cpp \
     bank.cpp \
     product_dialog.cpp \
-    sha1.cpp
+    sha256.cpp
 
 HEADERS += \
     bet_dialog.h \
@@ -34,7 +34,7 @@ HEADERS += \
     player.h \
     bank.h \
     product_dialog.h \
-    sha1.h
+    sha256.h
 
 FORMS += \
     mainwindow.ui \

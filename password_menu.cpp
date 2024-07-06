@@ -1,6 +1,6 @@
 #include "password_menu.h"
 #include "ui_password_menu.h"
-#include"sha1.h"
+#include"sha256.h"
 
 password_menu::password_menu(QWidget *parent)
     : QDialog(parent)
@@ -52,7 +52,7 @@ void password_menu::on_pushButton_clicked()
 
         QString pass = ui->lineEdit->text();
         ui->lineEdit->clear();
-        emit signal_pass_back(QString::fromStdString(sha1(pass.toStdString())));
+        emit signal_pass_back(QString::fromStdString(sha256(pass.toStdString())));
         i++;
         if(i==(a+1)){
             emit signal_pass_back("end");
