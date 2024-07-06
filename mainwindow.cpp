@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include"password_menu.h"
 #include "month_end_dialog.h"
+#include"sha1.h"
 #include<QString>
 #include<QVector>
 #include<QRandomGenerator>
@@ -11,12 +12,15 @@ int MainWindow::current_ind = 0;
 
 QVector <QString> passwords; // тут будут храниться пароли игроков
 QRandomGenerator *rg = QRandomGenerator::global();
-int session_key = rg->bounded(100, 1000);
-QVector <int> money_backup;    //откат денюжек
-QVector <int> raw_backup;
-QVector <int> product_backup;
-QVector <int> def_backup;
-QVector <int> auto_backup;
+int key_index=0;
+QString s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&\'()*+,-./:;<=>?@[]^_`{|}~";
+QString session_key;
+
+QVector <QString> money_backup;    //откат всего по порядку, будет храниться в виде хэшей
+QVector <QString> raw_backup;
+QVector <QString> product_backup;
+QVector <QString> def_backup;
+QVector <QString> auto_backup;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QIcon("/Economical-Strategy/resources/logo.png"));
 
     createStartMenu();
-
 }
 
 void MainWindow::createStartMenu() {
@@ -126,14 +129,23 @@ void MainWindow::updateBankPlayers() {
     b1->setAllPlayers(players);
 }
 void MainWindow:: updatePlayers() {
+
+    //генератор ключа
+    session_key="";
+    for (int i=0; i<20; i++){
+        key_index = rg->bounded(0, 83);
+        session_key+=s[key_index];
+    }
+    //qDebug()<<session_key;
+
     for(int i =0; i < players_interface.size(); i ++) {
         players_interface[i]->setPlayer(players[i]);
         players_interface[i]->updateData();
-        money_backup[i]=players[i].getMoney()*session_key;
-        raw_backup[i]=players[i].getRaw()*session_key;
-        product_backup[i]=players[i].getProduct()*session_key;
-        def_backup[i]=players[i].getDefFacts().size()*session_key;
-        auto_backup[i]=players[i].getAutoFacts().size()*session_key;
+        money_backup[i]=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString()));
+        raw_backup[i]=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString()));
+        product_backup[i]=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString()));
+        def_backup[i]=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString()));
+        auto_backup[i]=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString()));
     }
     checkGameOver();
 }
@@ -152,12 +164,18 @@ void MainWindow::slot_pass(QString password)
 
         createGameMenu();
 
+        session_key="";
+        for (int i=0; i<20; i++){
+            key_index = rg->bounded(0, 83);
+            session_key+=s[key_index];
+        }
+
         for(int i=0; i<players.size(); i++){
-            money_backup.push_back(players[i].getMoney()*session_key);
-            raw_backup.push_back(players[i].getRaw()*session_key);
-            product_backup.push_back(players[i].getProduct()*session_key);
-            def_backup.push_back(players[i].getDefFacts().size()*session_key);
-            auto_backup.push_back(players[i].getAutoFacts().size()*session_key);
+            money_backup.push_back(QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())));
+            raw_backup.push_back(QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())));
+            product_backup.push_back(QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())));
+            def_backup.push_back(QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())));
+            auto_backup.push_back(QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())));
         }
 
         players_interface[0]->show();
@@ -212,7 +230,7 @@ void MainWindow::rightButtonClicked() {
     // PlayerInterface::setRightBtnEn(false);
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -220,31 +238,28 @@ void MainWindow::rightButtonClicked() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -279,7 +294,6 @@ void MainWindow::rightButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
-        //players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->show();
         players_interface[current_ind]->hide_out();
     }
@@ -296,7 +310,7 @@ void MainWindow::leftButtonClicked() {
     // PlayerInterface::setRightBtnEn(false);
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -304,31 +318,28 @@ void MainWindow::leftButtonClicked() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -364,7 +375,6 @@ void MainWindow::leftButtonClicked() {
         if(current_ind > players.size() - 1) {
             current_ind = 0;
         }
-       // players_interface[current_ind]->anti_hide();
         players_interface[current_ind]->hide_out();
         players_interface[current_ind]->show();
     }
@@ -375,7 +385,7 @@ void MainWindow::leftButtonClicked() {
 void MainWindow::upgradeFactSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -383,38 +393,34 @@ void MainWindow::upgradeFactSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
     }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-
 
     fabric_dialog *rec1 = new fabric_dialog(this);
     rec1->show();
@@ -447,14 +453,7 @@ void MainWindow::upgradeFactSlot() {
 void MainWindow::produceSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -462,30 +461,34 @@ void MainWindow::produceSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
     }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-
 
     product_dialog *rec1 = new product_dialog(this);
     rec1->show();
@@ -797,7 +800,6 @@ void PlayerInterface::hide(){
     def_facts->setText("Обычных фабрик: ");
     auto_facts->setText("Автоматических фабрик: ");
     money->setText("Деньги: ");
-    qDebug()<<"hide";
     right_but->setEnabled(false);
     left_but->setEnabled(false);
     upgr_fact->setEnabled(false);
@@ -875,7 +877,7 @@ void PlayerInterface::setRightBtnEn(bool b) {
 void MainWindow::createTableSlot(){ // Берет инфу из players; любое его обновление сулит обновление таблицы
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -883,38 +885,34 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
+            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
+            players[i].setStatus("out");
+            players_interface[current_ind]->hide_out();
+            updatePlayers();
+        }
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
     }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
-            QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
-            players[i].setStatus("out");
-            players_interface[current_ind]->hide_out();
-            updatePlayers();
-        }
-    }
-
 
     static QTableWidget tableWidget(players.size(), 5);
      tableWidget.setFixedSize(645, 300);
@@ -942,7 +940,7 @@ void MainWindow::createTableSlot(){ // Берет инфу из players; люб�
 void MainWindow:: auctionSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -950,31 +948,28 @@ void MainWindow:: auctionSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1014,7 +1009,7 @@ void MainWindow:: auctionSlot() {
 void MainWindow:: creditSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1022,31 +1017,28 @@ void MainWindow:: creditSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1110,7 +1102,7 @@ void MainWindow:: creditSlot() {
 void MainWindow:: insuranceSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1118,31 +1110,28 @@ void MainWindow:: insuranceSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1185,7 +1174,7 @@ void MainWindow:: insuranceSlot() {
 void MainWindow::giveUpSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1193,31 +1182,28 @@ void MainWindow::giveUpSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1248,7 +1234,7 @@ void MainWindow::giveUpSlot() {
 void MainWindow::finishTurnSlot() {
 
     for(int i=0; i<players.size(); i++){
-        if((money_backup[i]!=players[i].getMoney()*session_key)){
+        if((money_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getMoney()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
@@ -1256,31 +1242,28 @@ void MainWindow::finishTurnSlot() {
         }
     }
     for(int i=0; i<players.size(); i++){
-        if((raw_backup[i]!=players[i].getRaw()*session_key)){
+        if((raw_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getRaw()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((product_backup[i]!=players[i].getProduct()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((product_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getProduct()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((def_backup[i]!=players[i].getDefFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((def_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getDefFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();
             updatePlayers();
         }
-    }
-    for(int i=0; i<players.size(); i++){
-        if((auto_backup[i]!=players[i].getAutoFacts().size()*session_key)){
+    }    for(int i=0; i<players.size(); i++){
+        if((auto_backup[i]!=QString::fromStdString(sha1((QString::number(players[i].getAutoFacts().size()) + session_key).toStdString())))){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
             players[i].setStatus("out");
             players_interface[current_ind]->hide_out();

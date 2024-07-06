@@ -588,14 +588,15 @@ int Bank::randomEvent() {
         }
         return 3;
     }
-    case 4: {     // реализация наследства (оч сложно)
+    /*case 4: {     // реализация наследства (оч сложно)
 
 
         return 4;
     }
-    default: {
+    /*default: {
         return 0;
-    }
+    }*/
     }
     return 0;
+}
 }
