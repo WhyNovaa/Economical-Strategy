@@ -210,6 +210,7 @@ void MainWindow::rightButtonClicked() {
     // PlayerInterface temp();
     // PlayerInterface::setLeftBtnEn(false);
     // PlayerInterface::setRightBtnEn(false);
+
     for(int i=0; i<players.size(); i++){
         if((money_backup[i]!=players[i].getMoney()*session_key)){
             QMessageBox::warning(this, "warning", "Игроки пльзуются читами");
