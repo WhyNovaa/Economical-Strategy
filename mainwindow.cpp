@@ -504,17 +504,19 @@ void MainWindow::produceSlot() {
         else if(amount > players[current_ind].getRaw()) {
             QMessageBox::information(this, "Переработка сырья", "Недостаточно сырья, повторите попытку");
         }
-        int res = players[current_ind].putRawInFabrics(amount);
-        if(res == -1) {
-            QMessageBox::information(this, "Переработка сырья", "Недостаточно места на фабриках, повторите попытку");
-        }
-        else if(res == -2) {
-            QMessageBox::information(this, "Переработка сырья", "Недостаточно денег, повторите попытку");
-        }
         else {
-            QMessageBox::information(this, "Переработка сырья", "Операция выполнена успешно");
-            this->updateBankPlayers();
-            this->updatePlayers();
+            int res = players[current_ind].putRawInFabrics(amount);
+            if(res == -1) {
+                QMessageBox::information(this, "Переработка сырья", "Недостаточно места на фабриках, повторите попытку");
+            }
+            else if(res == -2) {
+                QMessageBox::information(this, "Переработка сырья", "Недостаточно денег, повторите попытку");
+            }
+            else {
+                QMessageBox::information(this, "Переработка сырья", "Операция выполнена успешно");
+                this->updateBankPlayers();
+                this->updatePlayers();
+            }
         }
         delete rec1;
     }
