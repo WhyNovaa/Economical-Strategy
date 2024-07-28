@@ -30,7 +30,7 @@ product_dialog::product_dialog(QWidget* pwgt) : QDialog(pwgt, Qt::WindowTitleHin
 
     setLayout(grid);
 
-    this->setWindowTitle("Запрос на получение кредита и погашение кредита");
+    this->setWindowTitle("Переработка сырья");
     this->setModal(true);
 
     this->setFixedSize(700, 200);
